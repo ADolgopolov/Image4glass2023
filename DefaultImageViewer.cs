@@ -16,7 +16,7 @@ public class DefaultImageViewer
 
     public string GetDefaultImageViewer()
     {
-        string imagePath = "1.jpg";
+        string imagePath = "1.png";
         char[] result = new char[1024];
         uint error = FindExecutable(imagePath, String.Empty, result);
 

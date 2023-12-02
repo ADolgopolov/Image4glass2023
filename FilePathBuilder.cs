@@ -48,6 +48,12 @@ namespace Image4glass
             }
         }
 
+        public string Part2_straight
+        {
+            get { return part2; }
+            set { part2 = value; }
+        }
+
         public string Part3
         {
             get { return part3; }
@@ -104,6 +110,30 @@ namespace Image4glass
             {
                 part1 = data;
                 isInitializated = true;
+            }
+        }
+
+        public bool initByFullPathFileName(string fullPathFileName) 
+        {
+            if (fullPathFileName.Contains(part1))
+            {
+
+                this.part2 = fullPathFileName.Replace(part1 + "\\", "");
+                
+                this.part2 = this.part2.Replace("\\Forward", "");
+                this.part2 = this.part2.Replace("\\Rear", "");
+                this.part2 = this.part2.Replace("\\Left", "");
+                this.part2 = this.part2.Replace("\\Right", "");
+                
+                this.part2 = this.part2.Replace("\\" + Path.GetFileName(fullPathFileName), "");
+
+                this.part3 = Path.GetFileNameWithoutExtension(fullPathFileName);
+
+                return true; 
+            }
+            else
+            {
+                return false;
             }
         }
     }

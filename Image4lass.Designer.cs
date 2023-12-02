@@ -401,11 +401,13 @@ namespace Image4glass
             // textBoxFolderName
             // 
             textBoxFolderName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBoxFolderName.Location = new Point(542, 4);
+            textBoxFolderName.BorderStyle = BorderStyle.FixedSingle;
+            textBoxFolderName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBoxFolderName.Location = new Point(542, 2);
             textBoxFolderName.Name = "textBoxFolderName";
             textBoxFolderName.ReadOnly = true;
             textBoxFolderName.RightToLeft = RightToLeft.Yes;
-            textBoxFolderName.Size = new Size(476, 23);
+            textBoxFolderName.Size = new Size(476, 29);
             textBoxFolderName.TabIndex = 16;
             textBoxFolderName.TextAlign = HorizontalAlignment.Right;
             // 
@@ -443,7 +445,7 @@ namespace Image4glass
             KeyPreview = true;
             MinimumSize = new Size(960, 480);
             Name = "Image4lass";
-            Text = "Image4lass 27-11-2023";
+            Text = "Image4lass 4-12-2023";
             FormClosing += Image4lass_FormClosing;
             Load += Image4lass_Load;
             KeyUp += Image4lass_KeyUp;

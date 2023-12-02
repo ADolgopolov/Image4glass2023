@@ -46,6 +46,33 @@ namespace Image4glass
             favoritesRunFolderListStore = new FavoritesRunFolderListStore(Properties.Settings.Default.FavoritesRunFolders);
         }
 
+        public Image4lass(string fileNameFromCommandString)
+        {
+            InitializeComponent();
+
+            this.folderName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            this.filePathBuilder = new FilePathBuilder();
+
+            this.toolStripStatusLabel.Text = filePathBuilder.Part1;
+
+            this.defaultImageViewer = new DefaultImageViewer();
+
+            favoritesRunFolderListStore = new FavoritesRunFolderListStore(Properties.Settings.Default.FavoritesRunFolders);
+
+            if (this.filePathBuilder.initByFullPathFileName(fileNameFromCommandString))
+            {
+                if (int.TryParse(filePathBuilder.Part3, out int fileNumber))
+                {
+                    folderNameChange(filePathBuilder.RunFolderFullPath);
+
+                    this.numericUpDownFotoNumber.Value = (this.numericUpDownFotoNumber.Value != fileNumber) ? fileNumber : ++fileNumber;
+                }
+            }
+            else { 
+                MessageBox.Show($"Помилка парсування шляху: Файл не належить до Базової директорій. Перевірте налаштування.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+            }
+        }
 
         private void folderNameChange(string newfolder)
         {
