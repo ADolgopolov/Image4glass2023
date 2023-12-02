@@ -70,5 +70,16 @@ namespace Image4glass.Properties {
                 this["BaseFolderPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection FavoritesRunFolders {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["FavoritesRunFolders"]));
+            }
+            set {
+                this["FavoritesRunFolders"] = value;
+            }
+        }
     }
 }

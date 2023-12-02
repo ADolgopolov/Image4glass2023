@@ -62,6 +62,7 @@ namespace Image4glass
             checkBoxFixZoom = new CheckBox();
             buttonZoomFit = new Button();
             textBoxFolderName = new TextBox();
+            buttonFavorites = new Button();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFotoNumber).BeginInit();
             tabControl.SuspendLayout();
             tabPageForward.SuspendLayout();
@@ -400,18 +401,31 @@ namespace Image4glass
             // textBoxFolderName
             // 
             textBoxFolderName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBoxFolderName.Location = new Point(454, 4);
+            textBoxFolderName.Location = new Point(542, 4);
             textBoxFolderName.Name = "textBoxFolderName";
             textBoxFolderName.ReadOnly = true;
-            textBoxFolderName.Size = new Size(564, 23);
+            textBoxFolderName.RightToLeft = RightToLeft.Yes;
+            textBoxFolderName.Size = new Size(476, 23);
             textBoxFolderName.TabIndex = 16;
+            textBoxFolderName.TextAlign = HorizontalAlignment.Right;
+            // 
+            // buttonFavorites
+            // 
+            buttonFavorites.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            buttonFavorites.Location = new Point(454, 0);
+            buttonFavorites.Name = "buttonFavorites";
+            buttonFavorites.Size = new Size(82, 30);
+            buttonFavorites.TabIndex = 17;
+            buttonFavorites.Text = "Favorites";
+            buttonFavorites.UseVisualStyleBackColor = true;
+            buttonFavorites.Click += buttonFavorites_Click;
             // 
             // Image4lass
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            CancelButton = buttonZoomFit;
             ClientSize = new Size(1264, 611);
+            Controls.Add(buttonFavorites);
             Controls.Add(textBoxFolderName);
             Controls.Add(buttonZoomFit);
             Controls.Add(checkBoxFixZoom);
@@ -487,5 +501,6 @@ namespace Image4glass
         private CheckBox checkBoxFixZoom;
         private Button buttonZoomFit;
         private TextBox textBoxFolderName;
+        private Button buttonFavorites;
     }
 }

@@ -20,6 +20,8 @@ namespace Image4glass
 
         bool isLoading4Images = false;
 
+        FavoritesRunFolderListStore favoritesRunFolderListStore;
+
         public static class ImageLabelText
         {
             public static string Forward = "Forward";
@@ -40,15 +42,18 @@ namespace Image4glass
             this.toolStripStatusLabel.Text = filePathBuilder.Part1;
 
             this.defaultImageViewer = new DefaultImageViewer();
+
+            favoritesRunFolderListStore = new FavoritesRunFolderListStore(Properties.Settings.Default.FavoritesRunFolders);
         }
 
-        
+
         private void folderNameChange(string newfolder)
         {
             if (Directory.Exists(newfolder))
             {
                 this.folderName = newfolder;
                 textBoxFolderName.Text = newfolder;
+                favoritesRunFolderListStore.AddNewRunFolder(newfolder);
             }
         }
 
@@ -149,6 +154,7 @@ namespace Image4glass
             buttonNumberDown.Visible = isEnable;
             buttonNumberUp.Visible = isEnable;
             buttonOpenFolder.Enabled = isEnable;
+            buttonFavorites.Enabled = isEnable;
             buttonZoomFit.Enabled = isEnable;
             checkBoxFixZoom.Enabled = isEnable;
             numericUpDownShiftimageIndex.Enabled = isEnable;
@@ -264,7 +270,7 @@ namespace Image4glass
                     {
 
                         folderNameChange(filePathBuilder.RunFolderFullPath);
-                        
+
                         this.numericUpDownFotoNumber.Value = (this.numericUpDownFotoNumber.Value != fileNumber) ? fileNumber : ++fileNumber;
                     }
                     else
@@ -344,6 +350,7 @@ namespace Image4glass
             Properties.Settings.Default.WindowLocation = this.Location;
             Properties.Settings.Default.LoadImgesMode = this.isLoading4Images;
             Properties.Settings.Default.BaseFolderPath = this.filePathBuilder.Part1;
+            Properties.Settings.Default.FavoritesRunFolders = favoritesRunFolderListStore.ReturnList();
             Properties.Settings.Default.Save();
         }
 
@@ -509,6 +516,10 @@ namespace Image4glass
 
         private void Image4lass_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Escape)
+            {
+                buttonZoomFit_Click(sender, e);
+            }
             if (e.KeyCode == Keys.Right)
             {
                 if (buttonNumberUp.Visible)
@@ -535,6 +546,10 @@ namespace Image4glass
             {
                 tabControl.SelectTab(3);
             }
+            if (e.KeyCode == Keys.F5)
+            {
+                this.buttonFavorites_Click(sender, e);
+            }
             if (e.KeyCode == Keys.F8)
             {
                 if (MessageBox.Show($"Змінити режим загрузки зображень?", "Налаштування", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -559,6 +574,21 @@ namespace Image4glass
         {
             if (!isLoading4Images)
                 numericUpDownNumber_ValueChanged(sender, e);
+        }
+
+        private void buttonFavorites_Click(object sender, EventArgs e)
+        {
+            FavoriteRunFoldersForm favoriteRunFoldersForm = new FavoriteRunFoldersForm(favoritesRunFolderListStore.GetListBoxItems());
+            favoriteRunFoldersForm.ShowDialog();
+
+            if ( !string.IsNullOrEmpty(favoriteRunFoldersForm.selectedRunFolder) )
+            {
+                folderNameChange(favoriteRunFoldersForm.selectedRunFolder);
+
+                if (this.numericUpDownFotoNumber.Value == this.numericUpDownShiftimageIndex.Value + 1)
+                    this.numericUpDownFotoNumber.Value = this.numericUpDownShiftimageIndex.Value + 2;
+                else this.numericUpDownFotoNumber.Value = this.numericUpDownShiftimageIndex.Value + 1;
+            }
         }
     }
 }
