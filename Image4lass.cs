@@ -512,7 +512,8 @@ namespace Image4glass
 
         private void pictureBoxForAll_DoubleClick(object sender, EventArgs e)
         {
-            defaultImageViewer.OpenImage(((PictureBox)sender).ImageLocation);
+            //defaultImageViewer.OpenImage(((PictureBox)sender).ImageLocation); OpenImageByExploer
+            defaultImageViewer.OpenImageByExploer(((PictureBox)sender).ImageLocation); 
         }
 
         private void tabControl_Resize(object sender, EventArgs e)

@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 
 public class DefaultImageViewer
 {
+    /*
     [DllImport("shell32.dll", SetLastError = true)]
     public static extern uint FindExecutable(string lpFile, string lpDirectory, [Out] char[] lpResult);
 
@@ -57,5 +58,13 @@ public class DefaultImageViewer
         {
             MessageBox.Show($"Error starting the program: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+    }
+    */
+    public void OpenImageByExploer(string imagePath)
+    {
+        using System.Diagnostics.Process fileopener = new System.Diagnostics.Process();
+        fileopener.StartInfo.FileName = "cmd";
+        fileopener.StartInfo.Arguments = $"/c start \"explorer\" \"{imagePath}\"";
+        fileopener.Start();
     }
 }

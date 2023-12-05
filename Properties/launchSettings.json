@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Image4glass": {
-      "commandName": "Project",
-      "commandLineArgs": "\"D:\\GDrive\\My Drive\\Sources\\Xplore1\\DELTONT1OL01\\DELTONT1OL01-2\\Photos\\Run 6\\Forward\\694.jpg\""
+      "commandName": "Project"
     }
   }
 }

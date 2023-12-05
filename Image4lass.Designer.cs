@@ -445,7 +445,7 @@ namespace Image4glass
             KeyPreview = true;
             MinimumSize = new Size(960, 480);
             Name = "Image4lass";
-            Text = "Image4lass 4-12-2023";
+            Text = "Image4lass 5-12-2023";
             FormClosing += Image4lass_FormClosing;
             Load += Image4lass_Load;
             KeyUp += Image4lass_KeyUp;
