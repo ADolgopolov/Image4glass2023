@@ -14,7 +14,7 @@ namespace Image4glass
     {
         string folderName;
 
-        DefaultImageViewer defaultImageViewer;
+        
 
         FilePathBuilder filePathBuilder;
 
@@ -41,7 +41,7 @@ namespace Image4glass
 
             this.toolStripStatusLabel.Text = filePathBuilder.Part1;
 
-            this.defaultImageViewer = new DefaultImageViewer();
+            
 
             favoritesRunFolderListStore = new FavoritesRunFolderListStore(Properties.Settings.Default.FavoritesRunFolders);
         }
@@ -56,7 +56,7 @@ namespace Image4glass
 
             this.toolStripStatusLabel.Text = filePathBuilder.Part1;
 
-            this.defaultImageViewer = new DefaultImageViewer();
+            
 
             favoritesRunFolderListStore = new FavoritesRunFolderListStore(Properties.Settings.Default.FavoritesRunFolders);
 
@@ -512,8 +512,13 @@ namespace Image4glass
 
         private void pictureBoxForAll_DoubleClick(object sender, EventArgs e)
         {
-            //defaultImageViewer.OpenImage(((PictureBox)sender).ImageLocation); OpenImageByExploer
-            defaultImageViewer.OpenImageByExploer(((PictureBox)sender).ImageLocation); 
+            PictureBox pictureBox = (PictureBox)sender;
+            if (pictureBox.Image != null)
+            {
+                ZoomImageForm zoomImage = new ZoomImageForm(pictureBox.Image);
+                zoomImage.Text = pictureBox.ImageLocation;
+                zoomImage.Show();
+            }
         }
 
         private void tabControl_Resize(object sender, EventArgs e)
