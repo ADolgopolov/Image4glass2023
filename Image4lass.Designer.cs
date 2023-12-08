@@ -35,19 +35,22 @@ namespace Image4glass
             buttonOpenFolder = new Button();
             tabControl = new TabControl();
             tabPageForward = new TabPage();
+            button_ForwardGetPath = new Button();
             labelForwardImageIndex = new Label();
             pictureBoxForward = new PictureBox();
             tabPageRear = new TabPage();
+            button_RearGetPath = new Button();
             labelRearImageIndex = new Label();
             pictureBoxRear = new PictureBox();
             tabPageLeft = new TabPage();
+            button_LeftGetPath = new Button();
             labelLeftImageIndex = new Label();
             pictureBoxLeft = new PictureBox();
             tabPageRight = new TabPage();
+            button_RightGetPath = new Button();
             labelRightImageIndex = new Label();
             pictureBoxRight = new PictureBox();
             numericUpDownShiftimageIndex = new NumericUpDown();
-            labelShift = new Label();
             folderBrowserDialog = new FolderBrowserDialog();
             statusStrip = new StatusStrip();
             toolStripStatusLabel = new ToolStripStatusLabel();
@@ -63,6 +66,7 @@ namespace Image4glass
             buttonZoomFit = new Button();
             textBoxFolderName = new TextBox();
             buttonFavorites = new Button();
+            button_GoToImge = new Button();
             ((System.ComponentModel.ISupportInitialize)numericUpDownFotoNumber).BeginInit();
             tabControl.SuspendLayout();
             tabPageForward.SuspendLayout();
@@ -79,7 +83,7 @@ namespace Image4glass
             // 
             // numericUpDownFotoNumber
             // 
-            numericUpDownFotoNumber.Font = new Font("Segoe UI", 11F);
+            numericUpDownFotoNumber.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
             numericUpDownFotoNumber.Location = new Point(123, 2);
             numericUpDownFotoNumber.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             numericUpDownFotoNumber.Name = "numericUpDownFotoNumber";
@@ -91,7 +95,7 @@ namespace Image4glass
             // 
             // buttonOpenFolder
             // 
-            buttonOpenFolder.Font = new Font("Segoe UI", 12F);
+            buttonOpenFolder.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             buttonOpenFolder.Location = new Point(300, 0);
             buttonOpenFolder.Name = "buttonOpenFolder";
             buttonOpenFolder.Size = new Size(148, 30);
@@ -107,9 +111,8 @@ namespace Image4glass
             tabControl.Controls.Add(tabPageRear);
             tabControl.Controls.Add(tabPageLeft);
             tabControl.Controls.Add(tabPageRight);
-            tabControl.Font = new Font("Segoe UI", 12F);
+            tabControl.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tabControl.Location = new Point(6, 32);
-            tabControl.MinimumSize = new Size(960, 480);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
             tabControl.Size = new Size(1252, 554);
@@ -121,6 +124,7 @@ namespace Image4glass
             // 
             // tabPageForward
             // 
+            tabPageForward.Controls.Add(button_ForwardGetPath);
             tabPageForward.Controls.Add(labelForwardImageIndex);
             tabPageForward.Controls.Add(pictureBoxForward);
             tabPageForward.Location = new Point(4, 30);
@@ -130,6 +134,19 @@ namespace Image4glass
             tabPageForward.TabIndex = 0;
             tabPageForward.Text = "Forward";
             tabPageForward.UseVisualStyleBackColor = true;
+            // 
+            // button_ForwardGetPath
+            // 
+            button_ForwardGetPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button_ForwardGetPath.AutoSize = true;
+            button_ForwardGetPath.FlatStyle = FlatStyle.Flat;
+            button_ForwardGetPath.Location = new Point(1145, 6);
+            button_ForwardGetPath.Name = "button_ForwardGetPath";
+            button_ForwardGetPath.Size = new Size(93, 33);
+            button_ForwardGetPath.TabIndex = 8;
+            button_ForwardGetPath.Text = "Get Path";
+            button_ForwardGetPath.UseVisualStyleBackColor = true;
+            button_ForwardGetPath.Click += button_ForwardGetPath_Click;
             // 
             // labelForwardImageIndex
             // 
@@ -158,6 +175,7 @@ namespace Image4glass
             // 
             // tabPageRear
             // 
+            tabPageRear.Controls.Add(button_RearGetPath);
             tabPageRear.Controls.Add(labelRearImageIndex);
             tabPageRear.Controls.Add(pictureBoxRear);
             tabPageRear.Location = new Point(4, 30);
@@ -167,6 +185,19 @@ namespace Image4glass
             tabPageRear.TabIndex = 1;
             tabPageRear.Text = "Rear";
             tabPageRear.UseVisualStyleBackColor = true;
+            // 
+            // button_RearGetPath
+            // 
+            button_RearGetPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button_RearGetPath.AutoSize = true;
+            button_RearGetPath.FlatStyle = FlatStyle.Flat;
+            button_RearGetPath.Location = new Point(1145, 6);
+            button_RearGetPath.Name = "button_RearGetPath";
+            button_RearGetPath.Size = new Size(93, 33);
+            button_RearGetPath.TabIndex = 9;
+            button_RearGetPath.Text = "Get Path";
+            button_RearGetPath.UseVisualStyleBackColor = true;
+            button_RearGetPath.Click += button_RearGetPath_Click;
             // 
             // labelRearImageIndex
             // 
@@ -195,6 +226,7 @@ namespace Image4glass
             // 
             // tabPageLeft
             // 
+            tabPageLeft.Controls.Add(button_LeftGetPath);
             tabPageLeft.Controls.Add(labelLeftImageIndex);
             tabPageLeft.Controls.Add(pictureBoxLeft);
             tabPageLeft.Location = new Point(4, 30);
@@ -204,6 +236,19 @@ namespace Image4glass
             tabPageLeft.TabIndex = 2;
             tabPageLeft.Text = "Left";
             tabPageLeft.UseVisualStyleBackColor = true;
+            // 
+            // button_LeftGetPath
+            // 
+            button_LeftGetPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button_LeftGetPath.AutoSize = true;
+            button_LeftGetPath.FlatStyle = FlatStyle.Flat;
+            button_LeftGetPath.Location = new Point(1145, 6);
+            button_LeftGetPath.Name = "button_LeftGetPath";
+            button_LeftGetPath.Size = new Size(93, 33);
+            button_LeftGetPath.TabIndex = 10;
+            button_LeftGetPath.Text = "Get Path";
+            button_LeftGetPath.UseVisualStyleBackColor = true;
+            button_LeftGetPath.Click += button_LeftGetPath_Click;
             // 
             // labelLeftImageIndex
             // 
@@ -232,6 +277,7 @@ namespace Image4glass
             // 
             // tabPageRight
             // 
+            tabPageRight.Controls.Add(button_RightGetPath);
             tabPageRight.Controls.Add(labelRightImageIndex);
             tabPageRight.Controls.Add(pictureBoxRight);
             tabPageRight.Location = new Point(4, 30);
@@ -241,6 +287,19 @@ namespace Image4glass
             tabPageRight.TabIndex = 3;
             tabPageRight.Text = "Right";
             tabPageRight.UseVisualStyleBackColor = true;
+            // 
+            // button_RightGetPath
+            // 
+            button_RightGetPath.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button_RightGetPath.AutoSize = true;
+            button_RightGetPath.FlatStyle = FlatStyle.Flat;
+            button_RightGetPath.Location = new Point(1145, 6);
+            button_RightGetPath.Name = "button_RightGetPath";
+            button_RightGetPath.Size = new Size(93, 33);
+            button_RightGetPath.TabIndex = 11;
+            button_RightGetPath.Text = "Get Path";
+            button_RightGetPath.UseVisualStyleBackColor = true;
+            button_RightGetPath.Click += button_RightGetPath_Click;
             // 
             // labelRightImageIndex
             // 
@@ -270,24 +329,13 @@ namespace Image4glass
             // numericUpDownShiftimageIndex
             // 
             numericUpDownShiftimageIndex.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            numericUpDownShiftimageIndex.Font = new Font("Segoe UI", 12F);
-            numericUpDownShiftimageIndex.Location = new Point(1168, 2);
+            numericUpDownShiftimageIndex.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            numericUpDownShiftimageIndex.Location = new Point(1147, 2);
             numericUpDownShiftimageIndex.Name = "numericUpDownShiftimageIndex";
             numericUpDownShiftimageIndex.Size = new Size(38, 29);
             numericUpDownShiftimageIndex.TabIndex = 4;
             numericUpDownShiftimageIndex.Value = new decimal(new int[] { 3, 0, 0, 0 });
             numericUpDownShiftimageIndex.ValueChanged += numericUpDownNumber_ValueChanged;
-            // 
-            // labelShift
-            // 
-            labelShift.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            labelShift.AutoSize = true;
-            labelShift.Font = new Font("Segoe UI", 12F);
-            labelShift.Location = new Point(1216, 5);
-            labelShift.Name = "labelShift";
-            labelShift.Size = new Size(42, 21);
-            labelShift.TabIndex = 5;
-            labelShift.Text = "Shift";
             // 
             // statusStrip
             // 
@@ -330,7 +378,7 @@ namespace Image4glass
             // 
             // buttonPast
             // 
-            buttonPast.Font = new Font("Segoe UI", 12F);
+            buttonPast.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             buttonPast.Location = new Point(0, 0);
             buttonPast.Name = "buttonPast";
             buttonPast.Size = new Size(117, 30);
@@ -342,7 +390,7 @@ namespace Image4glass
             // labelLoading
             // 
             labelLoading.BorderStyle = BorderStyle.FixedSingle;
-            labelLoading.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelLoading.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             labelLoading.Location = new Point(198, 3);
             labelLoading.Name = "labelLoading";
             labelLoading.Size = new Size(96, 23);
@@ -352,7 +400,7 @@ namespace Image4glass
             // 
             // buttonNumberDown
             // 
-            buttonNumberDown.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            buttonNumberDown.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             buttonNumberDown.Location = new Point(198, 0);
             buttonNumberDown.Name = "buttonNumberDown";
             buttonNumberDown.Size = new Size(48, 30);
@@ -363,7 +411,7 @@ namespace Image4glass
             // 
             // buttonNumberUp
             // 
-            buttonNumberUp.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            buttonNumberUp.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             buttonNumberUp.Location = new Point(246, 0);
             buttonNumberUp.Name = "buttonNumberUp";
             buttonNumberUp.Size = new Size(48, 30);
@@ -378,10 +426,9 @@ namespace Image4glass
             checkBoxFixZoom.AutoSize = true;
             checkBoxFixZoom.Checked = true;
             checkBoxFixZoom.CheckState = CheckState.Checked;
-            checkBoxFixZoom.Font = new Font("Segoe UI", 12F);
-            checkBoxFixZoom.Location = new Point(1069, 4);
+            checkBoxFixZoom.Location = new Point(1065, 7);
             checkBoxFixZoom.Name = "checkBoxFixZoom";
-            checkBoxFixZoom.Size = new Size(93, 25);
+            checkBoxFixZoom.Size = new Size(76, 19);
             checkBoxFixZoom.TabIndex = 14;
             checkBoxFixZoom.Text = "Fix Zoom";
             checkBoxFixZoom.UseVisualStyleBackColor = true;
@@ -389,7 +436,7 @@ namespace Image4glass
             // buttonZoomFit
             // 
             buttonZoomFit.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonZoomFit.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            buttonZoomFit.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             buttonZoomFit.Location = new Point(1024, 0);
             buttonZoomFit.Name = "buttonZoomFit";
             buttonZoomFit.Size = new Size(35, 30);
@@ -402,7 +449,7 @@ namespace Image4glass
             // 
             textBoxFolderName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             textBoxFolderName.BorderStyle = BorderStyle.FixedSingle;
-            textBoxFolderName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBoxFolderName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             textBoxFolderName.Location = new Point(542, 2);
             textBoxFolderName.Name = "textBoxFolderName";
             textBoxFolderName.ReadOnly = true;
@@ -413,7 +460,7 @@ namespace Image4glass
             // 
             // buttonFavorites
             // 
-            buttonFavorites.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            buttonFavorites.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             buttonFavorites.Location = new Point(454, 0);
             buttonFavorites.Name = "buttonFavorites";
             buttonFavorites.Size = new Size(82, 30);
@@ -422,11 +469,24 @@ namespace Image4glass
             buttonFavorites.UseVisualStyleBackColor = true;
             buttonFavorites.Click += buttonFavorites_Click;
             // 
+            // button_GoToImge
+            // 
+            button_GoToImge.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button_GoToImge.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button_GoToImge.Location = new Point(1194, 0);
+            button_GoToImge.Name = "button_GoToImge";
+            button_GoToImge.Size = new Size(70, 32);
+            button_GoToImge.TabIndex = 18;
+            button_GoToImge.Text = "Go";
+            button_GoToImge.UseVisualStyleBackColor = true;
+            button_GoToImge.Click += button_GoToImge_Click;
+            // 
             // Image4lass
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1264, 611);
+            Controls.Add(button_GoToImge);
             Controls.Add(buttonFavorites);
             Controls.Add(textBoxFolderName);
             Controls.Add(buttonZoomFit);
@@ -436,7 +496,6 @@ namespace Image4glass
             Controls.Add(labelLoading);
             Controls.Add(buttonPast);
             Controls.Add(statusStrip);
-            Controls.Add(labelShift);
             Controls.Add(numericUpDownShiftimageIndex);
             Controls.Add(tabControl);
             Controls.Add(buttonOpenFolder);
@@ -445,7 +504,7 @@ namespace Image4glass
             KeyPreview = true;
             MinimumSize = new Size(960, 480);
             Name = "Image4lass";
-            Text = "Image4lass 5-12-2023";
+            Text = "Image4lass 7-12-2023";
             FormClosing += Image4lass_FormClosing;
             Load += Image4lass_Load;
             KeyUp += Image4lass_KeyUp;
@@ -481,7 +540,6 @@ namespace Image4glass
         private TabPage tabPageRight;
         private PictureBox pictureBoxForward;
         private NumericUpDown numericUpDownShiftimageIndex;
-        private Label labelShift;
         private PictureBox pictureBoxRear;
         private PictureBox pictureBoxRight;
         private FolderBrowserDialog folderBrowserDialog;
@@ -504,5 +562,10 @@ namespace Image4glass
         private Button buttonZoomFit;
         private TextBox textBoxFolderName;
         private Button buttonFavorites;
+        private Button button_GoToImge;
+        private Button button_ForwardGetPath;
+        private Button button_RearGetPath;
+        private Button button_LeftGetPath;
+        private Button button_RightGetPath;
     }
 }

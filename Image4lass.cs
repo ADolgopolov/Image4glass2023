@@ -14,7 +14,7 @@ namespace Image4glass
     {
         string folderName;
 
-        
+
 
         FilePathBuilder filePathBuilder;
 
@@ -41,7 +41,7 @@ namespace Image4glass
 
             this.toolStripStatusLabel.Text = filePathBuilder.Part1;
 
-            
+
 
             favoritesRunFolderListStore = new FavoritesRunFolderListStore(Properties.Settings.Default.FavoritesRunFolders);
         }
@@ -56,7 +56,7 @@ namespace Image4glass
 
             this.toolStripStatusLabel.Text = filePathBuilder.Part1;
 
-            
+
 
             favoritesRunFolderListStore = new FavoritesRunFolderListStore(Properties.Settings.Default.FavoritesRunFolders);
 
@@ -69,8 +69,9 @@ namespace Image4glass
                     this.numericUpDownFotoNumber.Value = (this.numericUpDownFotoNumber.Value != fileNumber) ? fileNumber : ++fileNumber;
                 }
             }
-            else { 
-                MessageBox.Show($"Помилка парсування шляху: Файл не належить до Базової директорій. Перевірте налаштування.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+            else
+            {
+                MessageBox.Show($"Помилка парсування шляху: Файл не належить до Базової директорій. Перевірте налаштування.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -458,7 +459,7 @@ namespace Image4glass
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left || (e.Button == MouseButtons.Middle))
             {
                 startPoint = e.Location;
                 Cursor = Cursors.Hand;
@@ -486,7 +487,7 @@ namespace Image4glass
         private async void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left || (e.Button == MouseButtons.Middle))
             {
                 Point newLocation = pictureBox.Location;
                 newLocation.X += e.X - startPoint.X;
@@ -504,7 +505,7 @@ namespace Image4glass
 
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left || (e.Button == MouseButtons.Middle))
             {
                 Cursor = Cursors.Default;
             }
@@ -512,13 +513,7 @@ namespace Image4glass
 
         private void pictureBoxForAll_DoubleClick(object sender, EventArgs e)
         {
-            PictureBox pictureBox = (PictureBox)sender;
-            if (pictureBox.Image != null)
-            {
-                ZoomImageForm zoomImage = new ZoomImageForm(pictureBox.Image);
-                zoomImage.Text = pictureBox.ImageLocation;
-                zoomImage.Show();
-            }
+            buttonZoomFit_Click(sender, e);
         }
 
         private void tabControl_Resize(object sender, EventArgs e)
@@ -614,13 +609,180 @@ namespace Image4glass
             FavoriteRunFoldersForm favoriteRunFoldersForm = new FavoriteRunFoldersForm(favoritesRunFolderListStore.GetListBoxItems());
             favoriteRunFoldersForm.ShowDialog();
 
-            if ( !string.IsNullOrEmpty(favoriteRunFoldersForm.selectedRunFolder) )
+            if (!string.IsNullOrEmpty(favoriteRunFoldersForm.selectedRunFolder))
             {
                 folderNameChange(favoriteRunFoldersForm.selectedRunFolder);
 
                 if (this.numericUpDownFotoNumber.Value == this.numericUpDownShiftimageIndex.Value + 1)
                     this.numericUpDownFotoNumber.Value = this.numericUpDownShiftimageIndex.Value + 2;
                 else this.numericUpDownFotoNumber.Value = this.numericUpDownShiftimageIndex.Value + 1;
+            }
+        }
+
+        private void button_ForwardGetPath_Click(object sender, EventArgs e)
+        {
+            string fullPath = pictureBoxForward.ImageLocation;
+            if (!String.IsNullOrEmpty(fullPath))
+            {
+                string sourceFolder = @"Sources";
+
+                // Знаходимо індекс, де закінчується "Sources" в fullPath
+                int index = fullPath.IndexOf(@"Sources");
+
+                if (index != -1)
+                {
+                    // Відрізаємо частину шляху після папки "Sources"
+                    string result = fullPath.Substring(index + sourceFolder.Length + 1); // Додаємо 1 для включення роздільника
+
+                    this.labelForwardImageIndex.Text = result;
+                    Clipboard.SetText(result);
+                }
+                else
+                {
+                    MessageBox.Show("Папка 'Sources' не знайдена у шляху.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void button_RearGetPath_Click(object sender, EventArgs e)
+        {
+            string fullPath = pictureBoxRear.ImageLocation;
+            if (!String.IsNullOrEmpty(fullPath))
+            {
+                string sourceFolder = @"Sources";
+
+                // Знаходимо індекс, де закінчується "Sources" в fullPath
+                int index = fullPath.IndexOf(@"Sources");
+
+                if (index != -1)
+                {
+                    // Відрізаємо частину шляху після папки "Sources"
+                    string result = fullPath.Substring(index + sourceFolder.Length + 1); // Додаємо 1 для включення роздільника
+
+                    this.labelRearImageIndex.Text = result;
+                    Clipboard.SetText(result);
+                }
+                else
+                {
+                    MessageBox.Show("Папка 'Sources' не знайдена у шляху.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void button_LeftGetPath_Click(object sender, EventArgs e)
+        {
+            string fullPath = pictureBoxLeft.ImageLocation;
+            if (!String.IsNullOrEmpty(fullPath))
+            {
+                string sourceFolder = @"Sources";
+
+                // Знаходимо індекс, де закінчується "Sources" в fullPath
+                int index = fullPath.IndexOf(@"Sources");
+
+                if (index != -1)
+                {
+                    // Відрізаємо частину шляху після папки "Sources"
+                    string result = fullPath.Substring(index + sourceFolder.Length + 1); // Додаємо 1 для включення роздільника
+
+                    this.labelLeftImageIndex.Text = result;
+                    Clipboard.SetText(result);
+                }
+                else
+                {
+                    MessageBox.Show("Папка 'Sources' не знайдена у шляху.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void button_RightGetPath_Click(object sender, EventArgs e)
+        {
+            string fullPath = pictureBoxRight.ImageLocation;
+            if (!String.IsNullOrEmpty(fullPath))
+            {
+                string sourceFolder = @"Sources";
+
+                // Знаходимо індекс, де закінчується "Sources" в fullPath
+                int index = fullPath.IndexOf(@"Sources");
+
+                if (index != -1)
+                {
+                    // Відрізаємо частину шляху після папки "Sources"
+                    string result = fullPath.Substring(index + sourceFolder.Length + 1); // Додаємо 1 для включення роздільника
+
+                    this.labelRightImageIndex.Text = result;
+                    Clipboard.SetText(result);
+                }
+                else
+                {
+                    MessageBox.Show("Папка 'Sources' не знайдена у шляху.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void button_GoToImge_Click(object sender, EventArgs e)
+        {
+            /*
+            if (this.filePathBuilder.initByFullPathFileName(fileNameFromCommandString))
+            {
+                if (int.TryParse(filePathBuilder.Part3, out int fileNumber))
+                {
+                    folderNameChange(filePathBuilder.RunFolderFullPath);
+
+                    this.numericUpDownFotoNumber.Value = (this.numericUpDownFotoNumber.Value != fileNumber) ? fileNumber : ++fileNumber;
+                }
+            }
+            else
+            {
+                MessageBox.Show($"Помилка парсування шляху: Файл не належить до Базової директорій. Перевірте налаштування.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+             */
+            if (Clipboard.ContainsText() && filePathBuilder.Part1 != String.Empty)
+            {
+                string fullPath = filePathBuilder.Part1;
+
+                // Шлях до папки "Sources"
+                string sourceFolder = @"Sources";
+
+                // Знаходимо індекс, де закінчується "Sources" в fullPath
+                int index = fullPath.IndexOf(sourceFolder);
+
+                if (index != -1)
+                {
+                    // Відрізаємо частину шляху після папки "Sources"
+                    string result = fullPath.Substring(0, index + sourceFolder.Length);
+
+                    // Виводимо результат через MessageBox
+                    // MessageBox.Show(result, "Відрізаний шлях", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string filePath = Path.Combine(result, Clipboard.GetText());
+                    // MessageBox.Show(filePath, "лях", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    if (this.filePathBuilder.initByFullPathFileName(filePath))
+                    {
+                        if (int.TryParse(filePathBuilder.Part3, out int fileNumber))
+                        {
+                            folderNameChange(filePathBuilder.RunFolderFullPath);
+
+                            if (filePath.Contains("Forward")) { fileNumber += (int)numericUpDownShiftimageIndex.Value; tabControl.SelectTab(0); }
+                            if (filePath.Contains("Rear")) { fileNumber -= (int)numericUpDownShiftimageIndex.Value; tabControl.SelectTab(1); }
+                            if (filePath.Contains("Left")) { tabControl.SelectTab(2); }
+                            if (filePath.Contains("Right")) { tabControl.SelectTab(3); }
+                            this.numericUpDownFotoNumber.Value = fileNumber;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Помилка парсування шляху: Файл не належить до Базової директорій. Перевірте налаштування.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Image image = Image.FromFile(filePath);
+                        ZoomImageForm zoomImage = new ZoomImageForm(image);
+                        zoomImage.Text = filePath;
+                        Application.Run(zoomImage);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Папка 'Sources' не знайдена у шляху базової дерикторії", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
             }
         }
     }

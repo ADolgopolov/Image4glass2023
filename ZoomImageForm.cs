@@ -129,7 +129,7 @@ namespace Image4glass
 
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left || (e.Button == MouseButtons.Middle))
             {
                 startPoint = e.Location;
                 Cursor = Cursors.Hand;
@@ -148,7 +148,7 @@ namespace Image4glass
 
         private async void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left || (e.Button == MouseButtons.Middle))
             {
                 Point newLocation = pictureBox.Location;
                 newLocation.X += e.X - startPoint.X;
@@ -166,7 +166,7 @@ namespace Image4glass
 
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left || (e.Button == MouseButtons.Middle))
             {
                 Cursor = Cursors.Cross;
             }
@@ -186,6 +186,11 @@ namespace Image4glass
         }
 
         private void buttonFitImage_Click(object sender, EventArgs e)
+        {
+            zoomToFit();
+        }
+
+        private void ZoomImageForm_Load(object sender, EventArgs e)
         {
             zoomToFit();
         }

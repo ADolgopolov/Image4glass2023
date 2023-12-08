@@ -87,6 +87,7 @@
             StartPosition = FormStartPosition.Manual;
             Text = "ZoomImageForm";
             WindowState = FormWindowState.Maximized;
+            Load += ZoomImageForm_Load;
             KeyUp += ZoomImageForm_KeyUp;
             panel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
