@@ -9,6 +9,8 @@
     <ApplicationIcon>Image4glass.ico</ApplicationIcon>
     <Copyright>ADolgopolov. All rights reserved.</Copyright>
     <RepositoryUrl>https://github.com/ADolgopolov/Image4glass2023</RepositoryUrl>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyOriginatorKeyFile>D:\App\dolhopolov.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

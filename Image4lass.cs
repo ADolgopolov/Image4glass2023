@@ -244,6 +244,14 @@ namespace Image4glass
         {
             if (Clipboard.ContainsText())
             {
+                if (Clipboard.GetText().Contains(".jpg")) 
+                {
+                    if (MessageBox.Show("Буфер місить назву JPG файлу, спробувати його відкрити?", "Не відповідність вводу. Користуйтесь кнопкою PATH ↩", MessageBoxButtons.OKCancel) == DialogResult.OK) 
+                    { 
+                        this.button_GoToImge_Click(sender, e); 
+                    }
+                    return;
+                }
                 if (this.filePathBuilder.IsInitializated)
                 {
                     string part2 = Clipboard.GetText();

@@ -330,7 +330,7 @@ namespace Image4glass
             // 
             numericUpDownShiftimageIndex.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             numericUpDownShiftimageIndex.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            numericUpDownShiftimageIndex.Location = new Point(1147, 2);
+            numericUpDownShiftimageIndex.Location = new Point(1144, 2);
             numericUpDownShiftimageIndex.Name = "numericUpDownShiftimageIndex";
             numericUpDownShiftimageIndex.Size = new Size(38, 29);
             numericUpDownShiftimageIndex.TabIndex = 4;
@@ -378,12 +378,12 @@ namespace Image4glass
             // 
             // buttonPast
             // 
-            buttonPast.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            buttonPast.Location = new Point(0, 0);
+            buttonPast.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonPast.Location = new Point(3, 0);
             buttonPast.Name = "buttonPast";
             buttonPast.Size = new Size(117, 30);
             buttonPast.TabIndex = 7;
-            buttonPast.Text = "Paste";
+            buttonPast.Text = "PHOTO NO ↩";
             buttonPast.UseVisualStyleBackColor = true;
             buttonPast.Click += buttonPast_Click;
             // 
@@ -426,7 +426,7 @@ namespace Image4glass
             checkBoxFixZoom.AutoSize = true;
             checkBoxFixZoom.Checked = true;
             checkBoxFixZoom.CheckState = CheckState.Checked;
-            checkBoxFixZoom.Location = new Point(1065, 7);
+            checkBoxFixZoom.Location = new Point(1062, 7);
             checkBoxFixZoom.Name = "checkBoxFixZoom";
             checkBoxFixZoom.Size = new Size(76, 19);
             checkBoxFixZoom.TabIndex = 14;
@@ -436,10 +436,10 @@ namespace Image4glass
             // buttonZoomFit
             // 
             buttonZoomFit.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonZoomFit.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            buttonZoomFit.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             buttonZoomFit.Location = new Point(1024, 0);
             buttonZoomFit.Name = "buttonZoomFit";
-            buttonZoomFit.Size = new Size(35, 30);
+            buttonZoomFit.Size = new Size(32, 30);
             buttonZoomFit.TabIndex = 15;
             buttonZoomFit.Text = "><";
             buttonZoomFit.UseVisualStyleBackColor = true;
@@ -472,12 +472,12 @@ namespace Image4glass
             // button_GoToImge
             // 
             button_GoToImge.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button_GoToImge.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button_GoToImge.Location = new Point(1194, 0);
+            button_GoToImge.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            button_GoToImge.Location = new Point(1188, 0);
             button_GoToImge.Name = "button_GoToImge";
             button_GoToImge.Size = new Size(70, 32);
             button_GoToImge.TabIndex = 18;
-            button_GoToImge.Text = "Go";
+            button_GoToImge.Text = "Path ↩";
             button_GoToImge.UseVisualStyleBackColor = true;
             button_GoToImge.Click += button_GoToImge_Click;
             // 
@@ -504,7 +504,7 @@ namespace Image4glass
             KeyPreview = true;
             MinimumSize = new Size(960, 480);
             Name = "Image4lass";
-            Text = "Image4lass 7-12-2023";
+            Text = "Image4glass 23-12-2023";
             FormClosing += Image4lass_FormClosing;
             Load += Image4lass_Load;
             KeyUp += Image4lass_KeyUp;
