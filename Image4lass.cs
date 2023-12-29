@@ -729,22 +729,7 @@ namespace Image4glass
 
         private void button_GoToImge_Click(object sender, EventArgs e)
         {
-            /*
-            if (this.filePathBuilder.initByFullPathFileName(fileNameFromCommandString))
-            {
-                if (int.TryParse(filePathBuilder.Part3, out int fileNumber))
-                {
-                    folderNameChange(filePathBuilder.RunFolderFullPath);
-
-                    this.numericUpDownFotoNumber.Value = (this.numericUpDownFotoNumber.Value != fileNumber) ? fileNumber : ++fileNumber;
-                }
-            }
-            else
-            {
-                MessageBox.Show($"Помилка парсування шляху: Файл не належить до Базової директорій. Перевірте налаштування.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-             */
-            if (Clipboard.ContainsText() && filePathBuilder.Part1 != String.Empty)
+            if (Clipboard.ContainsText() && filePathBuilder.Part1 != String.Empty && Clipboard.GetText().Contains(".jpg"))
             {
                 string fullPath = filePathBuilder.Part1;
 
@@ -759,10 +744,7 @@ namespace Image4glass
                     // Відрізаємо частину шляху після папки "Sources"
                     string result = fullPath.Substring(0, index + sourceFolder.Length);
 
-                    // Виводимо результат через MessageBox
-                    // MessageBox.Show(result, "Відрізаний шлях", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     string filePath = Path.Combine(result, Clipboard.GetText());
-                    // MessageBox.Show(filePath, "лях", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     if (this.filePathBuilder.initByFullPathFileName(filePath))
                     {
@@ -777,20 +759,15 @@ namespace Image4glass
                             this.numericUpDownFotoNumber.Value = fileNumber;
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show($"Помилка парсування шляху: Файл не належить до Базової директорій. Перевірте налаштування.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Image image = Image.FromFile(filePath);
-                        ZoomImageForm zoomImage = new ZoomImageForm(image);
-                        zoomImage.Text = filePath;
-                        Application.Run(zoomImage);
-                    }
                 }
                 else
                 {
                     MessageBox.Show("Папка 'Sources' не знайдена у шляху базової дерикторії", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
+            }
+            else {
+                MessageBox.Show("Буфер не місить назву JPG файлу: \n\n" + Clipboard.GetText(), "Не відповідність вводу.", MessageBoxButtons.OK);
             }
         }
     }
