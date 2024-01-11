@@ -381,13 +381,17 @@ namespace Image4glass
         /// <param name="e"></param>
         private void Image4lass_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Збереження розміру та розташування вікна
-            Properties.Settings.Default.WindowSize = this.Size;
-            Properties.Settings.Default.WindowLocation = this.Location;
-            Properties.Settings.Default.LoadImgesMode = this.isLoading4Images;
-            Properties.Settings.Default.BaseFolderPath = this.filePathBuilder.Part1;
-            Properties.Settings.Default.FavoritesRunFolders = favoritesRunFolderListStore.ReturnList();
-            Properties.Settings.Default.Save();
+            try
+            {
+                // Збереження розміру та розташування вікна
+                Properties.Settings.Default.WindowSize = this.Size;
+                Properties.Settings.Default.WindowLocation = this.Location;
+                Properties.Settings.Default.LoadImgesMode = this.isLoading4Images;
+                Properties.Settings.Default.BaseFolderPath = this.filePathBuilder.Part1;
+                Properties.Settings.Default.FavoritesRunFolders = favoritesRunFolderListStore.ReturnList();
+                Properties.Settings.Default.Save();
+            }
+            catch { }
         }
 
         /// <summary>
