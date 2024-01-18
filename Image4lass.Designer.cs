@@ -504,9 +504,10 @@ namespace Image4glass
             KeyPreview = true;
             MinimumSize = new Size(960, 480);
             Name = "Image4lass";
-            Text = "Image4glass 2023";
+            Text = "Image4glass 2024-01-18";
             FormClosing += Image4lass_FormClosing;
             Load += Image4lass_Load;
+            KeyDown += Image4lass_KeyDown;
             KeyUp += Image4lass_KeyUp;
             ((System.ComponentModel.ISupportInitialize)numericUpDownFotoNumber).EndInit();
             tabControl.ResumeLayout(false);

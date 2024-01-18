@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Image4glass
 {
@@ -19,6 +20,8 @@ namespace Image4glass
         FilePathBuilder filePathBuilder;
 
         bool isLoading4Images = false;
+
+        bool isEnableScrolImages = false;
 
         FavoritesRunFolderListStore favoritesRunFolderListStore;
 
@@ -217,7 +220,7 @@ namespace Image4glass
 
                 if (!this.checkBoxFixZoom.Checked)
                 {
-                    PictureBox senderPictureBox = new PictureBox();
+                    PictureBox senderPictureBox = new();
                     switch (this.tabControl.SelectedIndex)
                     {
                         case 0:
@@ -244,11 +247,11 @@ namespace Image4glass
         {
             if (Clipboard.ContainsText())
             {
-                if (Clipboard.GetText().Contains(".jpg")) 
+                if (Clipboard.GetText().Contains(".jpg"))
                 {
-                    if (MessageBox.Show("Буфер місить назву JPG файлу, спробувати його відкрити?", "Не відповідність вводу. Користуйтесь кнопкою PATH ↩", MessageBoxButtons.OKCancel) == DialogResult.OK) 
-                    { 
-                        this.button_GoToImge_Click(sender, e); 
+                    if (MessageBox.Show("Буфер місить назву JPG файлу, спробувати його відкрити?", "Не відповідність вводу. Користуйтесь кнопкою PATH ↩", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        this.button_GoToImge_Click(sender, e);
                     }
                     return;
                 }
@@ -258,19 +261,19 @@ namespace Image4glass
                     try
                     {
                         part2 = Regex.Replace(part2, @"\p{C}+", ""); // for desktop version 
-                        if (part2.Contains("|") && part2.Contains("Run"))
+                        if (part2.Contains('|') && part2.Contains("Run"))
                         {
                             filePathBuilder.Part2 = part2.Substring(0, part2.LastIndexOf("|")).Replace("Run", "Photos\\Run");
                         }
                         else
                         {
-                            if (part2.Contains("-") && part2.Contains("Run"))
+                            if (part2.Contains('-') && part2.Contains("Run"))
                             {
                                 filePathBuilder.Part2 = part2.Substring(0, part2.LastIndexOf("-")).Replace("Run", "Photos\\Run");
                             }
                             else
                             {
-                                if (part2.Contains("_") && part2.Contains("Run"))
+                                if (part2.Contains('_') && part2.Contains("Run"))
                                 {
                                     filePathBuilder.Part2 = part2.Substring(0, part2.LastIndexOf("_")).Replace("Run", "Photos\\Run");
                                 }
@@ -282,19 +285,19 @@ namespace Image4glass
                         MessageBox.Show($"Помилка парсування шляху: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     int lastSeparatorIndex = 0;
-                    if (part2.Contains("|"))
+                    if (part2.Contains('|'))
                     {
                         lastSeparatorIndex = part2.LastIndexOf("|") + 1;
                     }
                     else
                     {
-                        if (part2.Contains("-"))
+                        if (part2.Contains('-'))
                         {
                             lastSeparatorIndex = part2.LastIndexOf("-") + 1;
                         }
                         else
                         {
-                            if (part2.Contains("_"))
+                            if (part2.Contains('_'))
                             {
                                 lastSeparatorIndex = part2.LastIndexOf("_") + 1;
                             }
@@ -387,6 +390,8 @@ namespace Image4glass
                 Properties.Settings.Default.WindowSize = this.Size;
                 Properties.Settings.Default.WindowLocation = this.Location;
                 Properties.Settings.Default.LoadImgesMode = this.isLoading4Images;
+                Properties.Settings.Default.ScrolingImageMode = this.isEnableScrolImages;
+                Properties.Settings.Default.FixZoomChecked = this.checkBoxFixZoom.Checked;
                 Properties.Settings.Default.BaseFolderPath = this.filePathBuilder.Part1;
                 Properties.Settings.Default.FavoritesRunFolders = favoritesRunFolderListStore.ReturnList();
                 Properties.Settings.Default.Save();
@@ -406,6 +411,8 @@ namespace Image4glass
             this.Size = Properties.Settings.Default.WindowSize;
             this.Location = Properties.Settings.Default.WindowLocation;
             this.isLoading4Images = Properties.Settings.Default.LoadImgesMode;
+            this.isEnableScrolImages = Properties.Settings.Default.ScrolingImageMode;
+            this.checkBoxFixZoom.Checked = Properties.Settings.Default.FixZoomChecked;
             if (this.isLoading4Images) { labelLoading.ForeColor = Color.ForestGreen; }
         }
 
@@ -427,34 +434,103 @@ namespace Image4glass
 
         private void pictureBoxZoomImage_MouseWheel(object sender, MouseEventArgs e)
         {
-            PictureBox senderPictureBox = (PictureBox)sender;
-            float zoomFactor = ((float)senderPictureBox.Width) / 2048.0f;
-            const float ZoomIncrement = 0.2f;
-            // Змінюємо масштаб відповідно до кількості клацань колеса мишки
-            if (e.Delta > 0)
+            if (isEnableScrolImages) // по скрипту
             {
-                zoomFactor += (zoomFactor < 4.0f) ? ZoomIncrement : 0;
+                if (Control.ModifierKeys.HasFlag(Keys.Control))
+                {
+                    PictureBox senderPictureBox = (PictureBox)sender;
+                    if (senderPictureBox.Image == null) { return; }
+                    float zoomFactor = ((float)senderPictureBox.Width) / 2048.0f;
+                    const float ZoomIncrement = 0.2f;
+                    // Змінюємо масштаб відповідно до кількості клацань колеса мишки
+                    if (e.Delta > 0)
+                    {
+                        zoomFactor += (zoomFactor < 4.0f) ? ZoomIncrement : 0;
+                    }
+                    else
+                    {
+                        zoomFactor -= (zoomFactor > 0.25f) ? ZoomIncrement : 0;
+                    }
+
+                    // Зберігаємо старі розміри PictureBox
+                    int previousWidth = senderPictureBox.Width;
+                    int previousHeight = senderPictureBox.Height;
+
+                    // Змінюємо розмір зображення
+                    senderPictureBox.Width = (int)(senderPictureBox.Image.Width * zoomFactor);
+                    senderPictureBox.Height = (int)(senderPictureBox.Image.Height * zoomFactor);
+
+                    // При зміні масштабу, центруємо PictureBox по курсору
+                    senderPictureBox.Left -= (int)((senderPictureBox.Width - previousWidth) / 2);
+                    senderPictureBox.Top -= (int)((senderPictureBox.Height - previousHeight) / 2);
+
+                    if (senderPictureBox.Size.Height < this.Height)
+                    {
+                        CenterPictureBox(senderPictureBox);
+                    }
+                }
+                else
+                {
+                    if (e.Delta > 0)
+                    {
+                        if (buttonNumberUp.Visible)
+                            buttonNumberUp_Click(sender, e);
+                    }
+                    else
+                    {
+                        if (buttonNumberDown.Visible)
+                            buttonNumberDown_Click(sender, e);
+                    }
+                }
             }
             else
             {
-                zoomFactor -= (zoomFactor > 0.25f) ? ZoomIncrement : 0;
-            }
+                if (Control.ModifierKeys.HasFlag(Keys.Control))
+                {
+                    if (e.Delta > 0)
+                    {
+                        if (buttonNumberUp.Visible)
+                            buttonNumberUp_Click(sender, e);
+                    }
+                    else
+                    {
+                        if (buttonNumberDown.Visible)
+                            buttonNumberDown_Click(sender, e);
+                    }
+                }
+                else 
+                {
+                    PictureBox senderPictureBox = (PictureBox)sender;
+                    if (senderPictureBox.Image == null) { return; }
+                    float zoomFactor = ((float)senderPictureBox.Width) / 2048.0f;
+                    const float ZoomIncrement = 0.2f;
+                    // Змінюємо масштаб відповідно до кількості клацань колеса мишки
+                    if (e.Delta > 0)
+                    {
+                        zoomFactor += (zoomFactor < 4.0f) ? ZoomIncrement : 0;
+                    }
+                    else
+                    {
+                        zoomFactor -= (zoomFactor > 0.25f) ? ZoomIncrement : 0;
+                    }
 
-            // Зберігаємо старі розміри PictureBox
-            int previousWidth = senderPictureBox.Width;
-            int previousHeight = senderPictureBox.Height;
+                    // Зберігаємо старі розміри PictureBox
+                    int previousWidth = senderPictureBox.Width;
+                    int previousHeight = senderPictureBox.Height;
 
-            // Змінюємо розмір зображення
-            senderPictureBox.Width = (int)(senderPictureBox.Image.Width * zoomFactor);
-            senderPictureBox.Height = (int)(senderPictureBox.Image.Height * zoomFactor);
+                    // Змінюємо розмір зображення
+                    senderPictureBox.Width = (int)(senderPictureBox.Image.Width * zoomFactor);
+                    senderPictureBox.Height = (int)(senderPictureBox.Image.Height * zoomFactor);
 
-            // При зміні масштабу, центруємо PictureBox по курсору
-            senderPictureBox.Left -= (int)((senderPictureBox.Width - previousWidth) / 2);
-            senderPictureBox.Top -= (int)((senderPictureBox.Height - previousHeight) / 2);
+                    // При зміні масштабу, центруємо PictureBox по курсору
+                    senderPictureBox.Left -= (int)((senderPictureBox.Width - previousWidth) / 2);
+                    senderPictureBox.Top -= (int)((senderPictureBox.Height - previousHeight) / 2);
 
-            if (senderPictureBox.Size.Height < this.Height)
-            {
-                CenterPictureBox(senderPictureBox);
+                    if (senderPictureBox.Size.Height < this.Height)
+                    {
+                        CenterPictureBox(senderPictureBox);
+                    }
+                }
             }
         }
 
@@ -482,7 +558,7 @@ namespace Image4glass
                 {
                     if (pictureBox.Image != null)
                     {
-                        ZoomImageForm zoomImage = new ZoomImageForm(pictureBox.Image);
+                        ZoomImageForm zoomImage = new(pictureBox.Image);
                         zoomImage.Text = pictureBox.ImageLocation;
                         zoomImage.Show();
                     }
@@ -554,12 +630,58 @@ namespace Image4glass
             tabControl_Resize(sender, e);
         }
 
+        private void Image4lass_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1 || (e.Alt && e.KeyCode == Keys.D1))
+            {
+                tabControl.SelectTab(0);
+            }
+            if (e.KeyCode == Keys.F2 || (e.Alt && e.KeyCode == Keys.D2))
+            {
+                tabControl.SelectTab(1);
+            }
+            if (e.KeyCode == Keys.F3 || (e.Alt && e.KeyCode == Keys.D3))
+            {
+                tabControl.SelectTab(2);
+            }
+            if (e.KeyCode == Keys.F4 || (e.Alt && e.KeyCode == Keys.D4))
+            {
+                tabControl.SelectTab(3);
+            }
+
+            if (e.Control && e.KeyCode == Keys.C)
+            {
+                switch (tabControl.SelectedIndex)
+                {
+                    case 0:
+                        button_ForwardGetPath_Click(sender, e);
+                        break;
+                    case 1:
+                        button_RearGetPath_Click(sender, e);
+                        break;
+                    case 2:
+                        button_LeftGetPath_Click(sender, e);
+                        break;
+                    case 3:
+                        button_RightGetPath_Click(sender, e);
+                        break;
+                }
+            }
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                button_GoToImge_Click(sender, e);
+                Clipboard.Clear();
+            }
+        }
+
         private void Image4lass_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
+            if (e.KeyCode == Keys.Escape || (e.KeyCode == Keys.F))
             {
                 buttonZoomFit_Click(sender, e);
             }
+
+            // перехід між зображеннями за допомогою стрілок клавіатури
             if (e.KeyCode == Keys.Right)
             {
                 if (buttonNumberUp.Visible)
@@ -570,26 +692,12 @@ namespace Image4glass
                 if (buttonNumberDown.Visible)
                     buttonNumberDown_Click(sender, e);
             }
-            if (e.KeyCode == Keys.F1)
-            {
-                tabControl.SelectTab(0);
-            }
-            if (e.KeyCode == Keys.F2)
-            {
-                tabControl.SelectTab(1);
-            }
-            if (e.KeyCode == Keys.F3)
-            {
-                tabControl.SelectTab(2);
-            }
-            if (e.KeyCode == Keys.F4)
-            {
-                tabControl.SelectTab(3);
-            }
+            
             if (e.KeyCode == Keys.F5)
             {
                 this.buttonFavorites_Click(sender, e);
             }
+
             if (e.KeyCode == Keys.F8)
             {
                 if (MessageBox.Show($"Змінити режим загрузки зображень?", "Налаштування", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -608,6 +716,30 @@ namespace Image4glass
                     }
                 }
             }
+
+            if (e.KeyCode == Keys.F9)
+            {
+                if (MessageBox.Show($"Змінити налаштування подій при прокручувані колеса мишки?", "Налаштування", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    if (isEnableScrolImages)
+                    {
+                        isEnableScrolImages = false;
+                        MessageBox.Show($"Прокручування колеса мишки буде маштабувати зображення. \n Для переходу між зображеннями утримуйте CTRL.", "Налаштування", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        isEnableScrolImages = true;
+                        MessageBox.Show($"Прокручування колеса мишки буде переключати зображення. \n Для маштабування зображення утримуйте CTRL.", "Налаштування", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+            }
+
+            if(e.KeyCode == Keys.G)
+            {
+                InputNumberForm fm = new(this.numericUpDownFotoNumber.Value);
+                fm.ShowDialog();
+                this.numericUpDownFotoNumber.Value = fm.value;
+            }
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -618,7 +750,7 @@ namespace Image4glass
 
         private void buttonFavorites_Click(object sender, EventArgs e)
         {
-            FavoriteRunFoldersForm favoriteRunFoldersForm = new FavoriteRunFoldersForm(favoritesRunFolderListStore.GetListBoxItems());
+            FavoriteRunFoldersForm favoriteRunFoldersForm = new(favoritesRunFolderListStore.GetListBoxItems());
             favoriteRunFoldersForm.ShowDialog();
 
             if (!string.IsNullOrEmpty(favoriteRunFoldersForm.selectedRunFolder))
@@ -770,9 +902,22 @@ namespace Image4glass
                 }
 
             }
-            else {
-                MessageBox.Show("Буфер не місить назву JPG файлу: \n\n" + Clipboard.GetText(), "Не відповідність вводу.", MessageBoxButtons.OK);
+            else
+            {
+                if (Clipboard.GetText().Contains('|'))
+                {
+                    if (MessageBox.Show("Буфер місить строку із символом \'|\', спробувати його відкрити, як \"Photo NO\"?", "Не відповідність вводу. Користуйтесь кнопкою PHOTO NO ↩", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        this.buttonPast_Click(sender, e);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Буфер не місить назву JPG файлу: \n\n" + Clipboard.GetText(), "Не відповідність вводу.", MessageBoxButtons.OK);
+                }
             }
         }
+
+        
     }
 }

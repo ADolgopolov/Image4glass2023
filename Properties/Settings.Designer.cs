@@ -81,5 +81,29 @@ namespace Image4glass.Properties {
                 this["FavoritesRunFolders"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ScrolingImageMode {
+            get {
+                return ((bool)(this["ScrolingImageMode"]));
+            }
+            set {
+                this["ScrolingImageMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FixZoomChecked {
+            get {
+                return ((bool)(this["FixZoomChecked"]));
+            }
+            set {
+                this["FixZoomChecked"] = value;
+            }
+        }
     }
 }
