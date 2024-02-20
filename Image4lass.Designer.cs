@@ -134,6 +134,8 @@ namespace Image4glass
             tabPageForward.TabIndex = 0;
             tabPageForward.Text = "Forward";
             tabPageForward.UseVisualStyleBackColor = true;
+            tabPageForward.Click += buttonZoomFit_Click;
+            tabPageForward.MouseWheel += emptySpace_MouseWheel;
             // 
             // button_ForwardGetPath
             // 
@@ -156,6 +158,7 @@ namespace Image4glass
             labelForwardImageIndex.Size = new Size(14, 21);
             labelForwardImageIndex.TabIndex = 7;
             labelForwardImageIndex.Text = " ";
+            labelForwardImageIndex.TextChanged += forAllLabelsImageIndex_TextChanged;
             labelForwardImageIndex.Click += forAll_labels_ImageIndex_Click;
             // 
             // pictureBoxForward
@@ -185,6 +188,8 @@ namespace Image4glass
             tabPageRear.TabIndex = 1;
             tabPageRear.Text = "Rear";
             tabPageRear.UseVisualStyleBackColor = true;
+            tabPageRear.Click += buttonZoomFit_Click;
+            tabPageRear.MouseWheel += emptySpace_MouseWheel_invert;
             // 
             // button_RearGetPath
             // 
@@ -207,6 +212,7 @@ namespace Image4glass
             labelRearImageIndex.Size = new Size(14, 21);
             labelRearImageIndex.TabIndex = 7;
             labelRearImageIndex.Text = " ";
+            labelRearImageIndex.TextChanged += forAllLabelsImageIndex_TextChanged;
             labelRearImageIndex.Click += forAll_labels_ImageIndex_Click;
             // 
             // pictureBoxRear
@@ -236,6 +242,8 @@ namespace Image4glass
             tabPageLeft.TabIndex = 2;
             tabPageLeft.Text = "Left";
             tabPageLeft.UseVisualStyleBackColor = true;
+            tabPageLeft.Click += buttonZoomFit_Click;
+            tabPageLeft.MouseWheel += emptySpace_MouseWheel;
             // 
             // button_LeftGetPath
             // 
@@ -258,6 +266,7 @@ namespace Image4glass
             labelLeftImageIndex.Size = new Size(14, 21);
             labelLeftImageIndex.TabIndex = 1;
             labelLeftImageIndex.Text = " ";
+            labelLeftImageIndex.TextChanged += forAllLabelsImageIndex_TextChanged;
             labelLeftImageIndex.Click += forAll_labels_ImageIndex_Click;
             // 
             // pictureBoxLeft
@@ -287,6 +296,8 @@ namespace Image4glass
             tabPageRight.TabIndex = 3;
             tabPageRight.Text = "Right";
             tabPageRight.UseVisualStyleBackColor = true;
+            tabPageRight.Click += buttonZoomFit_Click;
+            tabPageRight.MouseWheel += emptySpace_MouseWheel;
             // 
             // button_RightGetPath
             // 
@@ -309,6 +320,7 @@ namespace Image4glass
             labelRightImageIndex.Size = new Size(14, 21);
             labelRightImageIndex.TabIndex = 1;
             labelRightImageIndex.Text = " ";
+            labelRightImageIndex.TextChanged += forAllLabelsImageIndex_TextChanged;
             labelRightImageIndex.Click += forAll_labels_ImageIndex_Click;
             // 
             // pictureBoxRight
@@ -467,7 +479,7 @@ namespace Image4glass
             buttonFavorites.TabIndex = 17;
             buttonFavorites.Text = "Favorites";
             buttonFavorites.UseVisualStyleBackColor = true;
-            buttonFavorites.Click += buttonFavorites_Click;
+            buttonFavorites.Click += ButtonFavorites_Click;
             // 
             // button_GoToImge
             // 
@@ -504,7 +516,7 @@ namespace Image4glass
             KeyPreview = true;
             MinimumSize = new Size(960, 480);
             Name = "Image4lass";
-            Text = "Image4glass 2024-01-18";
+            Text = "Image4glass 2024-02-20";
             FormClosing += Image4lass_FormClosing;
             Load += Image4lass_Load;
             KeyDown += Image4lass_KeyDown;

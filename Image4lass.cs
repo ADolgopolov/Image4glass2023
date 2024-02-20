@@ -434,6 +434,8 @@ namespace Image4glass
 
         private void pictureBoxZoomImage_MouseWheel(object sender, MouseEventArgs e)
         {
+            ((HandledMouseEventArgs)e).Handled = true; // Позначаємо подію як вже оброблену, щоб її не обробив, на далі, tabPage(-Forvard, -Rear,...)
+
             if (isEnableScrolImages) // по скрипту
             {
                 if (Control.ModifierKeys.HasFlag(Keys.Control))
@@ -498,7 +500,7 @@ namespace Image4glass
                             buttonNumberDown_Click(sender, e);
                     }
                 }
-                else 
+                else
                 {
                     PictureBox senderPictureBox = (PictureBox)sender;
                     if (senderPictureBox.Image == null) { return; }
@@ -540,6 +542,48 @@ namespace Image4glass
             int y = (int)((tabControl.Height - 24 - senderPictureBox.Height) / 2);
             senderPictureBox.Location = new Point(x, y);
         }
+
+        private Dictionary<Label, bool> labelStates = new Dictionary<Label, bool>();
+        private Dictionary<Label, System.Windows.Forms.Timer> labelTimers = new Dictionary<Label, System.Windows.Forms.Timer>();
+
+        private void forAllLabelsImageIndex_TextChanged(object sender, EventArgs e)
+        {
+            Label label = (Label)sender;
+
+            if (label.Text != ImageLabelText.Loading)
+            {
+                label.Location = new Point(6, 3);
+                if (labelStates.ContainsKey(label))
+                {
+                    labelStates[label] = false;
+                    labelTimers[label].Stop();
+                }
+                return;
+            }
+
+            if (!labelStates.ContainsKey(label))
+            {
+                labelStates[label] = false;
+                labelTimers[label] = new System.Windows.Forms.Timer();
+                labelTimers[label].Interval = 200; // 0,2 секунди
+                labelTimers[label].Tick += (s, ev) =>
+                {
+                    Label currentLabel = (Label)sender;
+                    labelTimers[currentLabel].Stop(); // Зупиняємо таймер, оскільки зміна тексту відбулася
+                    int x = (int)((tabControl.Width - 24 - currentLabel.Width) / 2);
+                    int y = (int)((tabControl.Height - 24 - currentLabel.Height) / 2);
+                    currentLabel.Location = new Point(x, y);
+                    labelStates[currentLabel] = false;
+                };
+            }
+
+            labelStates[label] = true;
+            labelTimers[label].Stop(); // Скасовуємо попередню зміну розташування
+            labelTimers[label].Start();
+        }
+
+
+
 
 
         private Point startPoint;
@@ -692,10 +736,10 @@ namespace Image4glass
                 if (buttonNumberDown.Visible)
                     buttonNumberDown_Click(sender, e);
             }
-            
+
             if (e.KeyCode == Keys.F5)
             {
-                this.buttonFavorites_Click(sender, e);
+                this.ButtonFavorites_Click(sender, e);
             }
 
             if (e.KeyCode == Keys.F8)
@@ -734,7 +778,7 @@ namespace Image4glass
                 }
             }
 
-            if(e.KeyCode == Keys.G)
+            if (e.KeyCode == Keys.G)
             {
                 InputNumberForm fm = new(this.numericUpDownFotoNumber.Value);
                 fm.ShowDialog();
@@ -748,7 +792,7 @@ namespace Image4glass
                 numericUpDownNumber_ValueChanged(sender, e);
         }
 
-        private void buttonFavorites_Click(object sender, EventArgs e)
+        private void ButtonFavorites_Click(object sender, EventArgs e)
         {
             FavoriteRunFoldersForm favoriteRunFoldersForm = new(favoritesRunFolderListStore.GetListBoxItems());
             favoriteRunFoldersForm.ShowDialog();
@@ -918,6 +962,47 @@ namespace Image4glass
             }
         }
 
+        private void emptySpace_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (!((HandledMouseEventArgs)e).Handled)
+            {
+                // Обробляємо подію лише якщо вона не була вже оброблена pictureBox
+
+                if (e.Delta > 0)
+                {
+                    if (buttonNumberUp.Visible)
+                        buttonNumberUp_Click(sender, e);
+                }
+                else
+                {
+                    if (buttonNumberDown.Visible)
+                        buttonNumberDown_Click(sender, e);
+                }
+            }
+        }
+        /// <summary>
+        /// Це тільки для раєра
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void emptySpace_MouseWheel_invert(object sender, MouseEventArgs e)
+        {
+            if (!((HandledMouseEventArgs)e).Handled)
+            {
+                // Обробляємо подію лише якщо вона не була вже оброблена pictureBox
+
+                if (e.Delta < 0)
+                {
+                    if (buttonNumberUp.Visible)
+                        buttonNumberUp_Click(sender, e);
+                }
+                else
+                {
+                    if (buttonNumberDown.Visible)
+                        buttonNumberDown_Click(sender, e);
+                }
+            }
+        }
         
     }
 }
