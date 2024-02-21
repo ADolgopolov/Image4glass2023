@@ -19,8 +19,6 @@ namespace Image4glass
 
         FilePathBuilder filePathBuilder;
 
-        bool isLoading4Images = false;
-
         bool isEnableScrolImages = false;
 
         FavoritesRunFolderListStore favoritesRunFolderListStore;
@@ -68,6 +66,11 @@ namespace Image4glass
                 if (int.TryParse(filePathBuilder.Part3, out int fileNumber))
                 {
                     folderNameChange(filePathBuilder.RunFolderFullPath);
+
+                    if (fileNameFromCommandString.Contains("Forward")) { tabControl.SelectTab(0); }
+                    if (fileNameFromCommandString.Contains("Rear")) { tabControl.SelectTab(1); }
+                    if (fileNameFromCommandString.Contains("Left")) { tabControl.SelectTab(2); }
+                    if (fileNameFromCommandString.Contains("Right")) { tabControl.SelectTab(3); }
 
                     this.numericUpDownFotoNumber.Value = (this.numericUpDownFotoNumber.Value != fileNumber) ? fileNumber : ++fileNumber;
                 }
@@ -123,39 +126,15 @@ namespace Image4glass
                 {
                     case 0:
                         ImageLabelText.Forward = LoadImageOnTab(@"\Forward", this.pictureBoxForward, this.numericUpDownFotoNumber.Value - this.numericUpDownShiftimageIndex.Value);
-                        if (isLoading4Images)
-                        {
-                            ImageLabelText.Rear = LoadImageOnTab(@"\Rear", this.pictureBoxRear, this.numericUpDownFotoNumber.Value + this.numericUpDownShiftimageIndex.Value);
-                            ImageLabelText.Left = LoadImageOnTab(@"\Left", this.pictureBoxLeft, this.numericUpDownFotoNumber.Value);
-                            ImageLabelText.Right = LoadImageOnTab(@"\Right", this.pictureBoxRight, this.numericUpDownFotoNumber.Value);
-                        }
                         break;
                     case 1:
                         ImageLabelText.Rear = LoadImageOnTab(@"\Rear", this.pictureBoxRear, this.numericUpDownFotoNumber.Value + this.numericUpDownShiftimageIndex.Value);
-                        if (isLoading4Images)
-                        {
-                            ImageLabelText.Forward = LoadImageOnTab(@"\Forward", this.pictureBoxForward, this.numericUpDownFotoNumber.Value - this.numericUpDownShiftimageIndex.Value);
-                            ImageLabelText.Left = LoadImageOnTab(@"\Left", this.pictureBoxLeft, this.numericUpDownFotoNumber.Value);
-                            ImageLabelText.Right = LoadImageOnTab(@"\Right", this.pictureBoxRight, this.numericUpDownFotoNumber.Value);
-                        }
                         break;
                     case 2:
                         ImageLabelText.Left = LoadImageOnTab(@"\Left", this.pictureBoxLeft, this.numericUpDownFotoNumber.Value);
-                        if (isLoading4Images)
-                        {
-                            ImageLabelText.Right = LoadImageOnTab(@"\Right", this.pictureBoxRight, this.numericUpDownFotoNumber.Value);
-                            ImageLabelText.Rear = LoadImageOnTab(@"\Rear", this.pictureBoxRear, this.numericUpDownFotoNumber.Value + this.numericUpDownShiftimageIndex.Value);
-                            ImageLabelText.Forward = LoadImageOnTab(@"\Forward", this.pictureBoxForward, this.numericUpDownFotoNumber.Value - this.numericUpDownShiftimageIndex.Value);
-                        }
                         break;
                     case 3:
                         ImageLabelText.Right = LoadImageOnTab(@"\Right", this.pictureBoxRight, this.numericUpDownFotoNumber.Value);
-                        if (isLoading4Images)
-                        {
-                            ImageLabelText.Left = LoadImageOnTab(@"\Left", this.pictureBoxLeft, this.numericUpDownFotoNumber.Value);
-                            ImageLabelText.Rear = LoadImageOnTab(@"\Rear", this.pictureBoxRear, this.numericUpDownFotoNumber.Value + this.numericUpDownShiftimageIndex.Value);
-                            ImageLabelText.Forward = LoadImageOnTab(@"\Forward", this.pictureBoxForward, this.numericUpDownFotoNumber.Value - this.numericUpDownShiftimageIndex.Value);
-                        }
                         break;
                 }
             });
@@ -189,8 +168,7 @@ namespace Image4glass
             buttonZoomFit.Enabled = isEnable;
             checkBoxFixZoom.Enabled = isEnable;
             numericUpDownShiftimageIndex.Enabled = isEnable;
-            if (!isLoading4Images)
-                tabControl.Enabled = isEnable;
+            tabControl.Enabled = isEnable;
         }
         /// <summary>
         /// Тут відбувається вся магія. Міняється номер, запускається загрузка зображень.
@@ -201,10 +179,22 @@ namespace Image4glass
         {
             this.enabledCommandTools(false);
 
-            this.labelForwardImageIndex.Text = ImageLabelText.Loading;
-            this.labelRearImageIndex.Text = ImageLabelText.Loading;
-            this.labelLeftImageIndex.Text = ImageLabelText.Loading;
-            this.labelRightImageIndex.Text = ImageLabelText.Loading;
+            switch (this.tabControl.SelectedIndex)
+            {
+                case 0:
+                    this.labelForwardImageIndex.Text = ImageLabelText.Loading;
+                    break;
+                case 1:
+                    this.labelRearImageIndex.Text = ImageLabelText.Loading;
+                    break;
+                case 2:
+                    this.labelLeftImageIndex.Text = ImageLabelText.Loading;
+                    break;
+                case 3:
+                    this.labelRightImageIndex.Text = ImageLabelText.Loading;
+                    break;
+            }
+
             try
             {
                 await this.LoadImages(this.tabControl.SelectedIndex);
@@ -213,10 +203,22 @@ namespace Image4glass
             {
                 this.enabledCommandTools(true);
                 this.numericUpDownFotoNumber.Focus();
-                this.labelForwardImageIndex.Text = ImageLabelText.Forward;
-                this.labelRearImageIndex.Text = ImageLabelText.Rear;
-                this.labelLeftImageIndex.Text = ImageLabelText.Left;
-                this.labelRightImageIndex.Text = ImageLabelText.Right;
+                
+                switch (this.tabControl.SelectedIndex)
+                {
+                    case 0:
+                        this.labelForwardImageIndex.Text = ImageLabelText.Forward;
+                        break;
+                    case 1:
+                        this.labelRearImageIndex.Text = ImageLabelText.Rear;
+                        break;
+                    case 2:
+                        this.labelLeftImageIndex.Text = ImageLabelText.Left;
+                        break;
+                    case 3:
+                        this.labelRightImageIndex.Text = ImageLabelText.Right;
+                        break;
+                }
 
                 if (!this.checkBoxFixZoom.Checked)
                 {
@@ -265,20 +267,6 @@ namespace Image4glass
                         {
                             filePathBuilder.Part2 = part2.Substring(0, part2.LastIndexOf("|")).Replace("Run", "Photos\\Run");
                         }
-                        else
-                        {
-                            if (part2.Contains('-') && part2.Contains("Run"))
-                            {
-                                filePathBuilder.Part2 = part2.Substring(0, part2.LastIndexOf("-")).Replace("Run", "Photos\\Run");
-                            }
-                            else
-                            {
-                                if (part2.Contains('_') && part2.Contains("Run"))
-                                {
-                                    filePathBuilder.Part2 = part2.Substring(0, part2.LastIndexOf("_")).Replace("Run", "Photos\\Run");
-                                }
-                            }
-                        }
                     }
                     catch (Exception ex)
                     {
@@ -288,20 +276,6 @@ namespace Image4glass
                     if (part2.Contains('|'))
                     {
                         lastSeparatorIndex = part2.LastIndexOf("|") + 1;
-                    }
-                    else
-                    {
-                        if (part2.Contains('-'))
-                        {
-                            lastSeparatorIndex = part2.LastIndexOf("-") + 1;
-                        }
-                        else
-                        {
-                            if (part2.Contains('_'))
-                            {
-                                lastSeparatorIndex = part2.LastIndexOf("_") + 1;
-                            }
-                        }
                     }
                     filePathBuilder.Part3 = part2.Substring(lastSeparatorIndex, part2.Length - lastSeparatorIndex);
 
@@ -389,7 +363,6 @@ namespace Image4glass
                 // Збереження розміру та розташування вікна
                 Properties.Settings.Default.WindowSize = this.Size;
                 Properties.Settings.Default.WindowLocation = this.Location;
-                Properties.Settings.Default.LoadImgesMode = this.isLoading4Images;
                 Properties.Settings.Default.ScrolingImageMode = this.isEnableScrolImages;
                 Properties.Settings.Default.FixZoomChecked = this.checkBoxFixZoom.Checked;
                 Properties.Settings.Default.BaseFolderPath = this.filePathBuilder.Part1;
@@ -410,10 +383,8 @@ namespace Image4glass
             // Відновлення розміру та розташування вікна
             this.Size = Properties.Settings.Default.WindowSize;
             this.Location = Properties.Settings.Default.WindowLocation;
-            this.isLoading4Images = Properties.Settings.Default.LoadImgesMode;
             this.isEnableScrolImages = Properties.Settings.Default.ScrolingImageMode;
             this.checkBoxFixZoom.Checked = Properties.Settings.Default.FixZoomChecked;
-            if (this.isLoading4Images) { labelLoading.ForeColor = Color.ForestGreen; }
         }
 
         private void openBasicFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -583,9 +554,6 @@ namespace Image4glass
         }
 
 
-
-
-
         private Point startPoint;
 
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
@@ -713,7 +681,17 @@ namespace Image4glass
             }
             if (e.Control && e.KeyCode == Keys.V)
             {
-                button_GoToImge_Click(sender, e);
+                if (Clipboard.ContainsText())
+                {
+                    if (Clipboard.GetText().Contains(".jpg"))
+                    {
+                        this.button_GoToImge_Click(sender, e);
+                    }
+                    else 
+                    {
+                        buttonPast_Click(sender, e);
+                    }
+                }
                 Clipboard.Clear();
             }
         }
@@ -740,25 +718,6 @@ namespace Image4glass
             if (e.KeyCode == Keys.F5)
             {
                 this.ButtonFavorites_Click(sender, e);
-            }
-
-            if (e.KeyCode == Keys.F8)
-            {
-                if (MessageBox.Show($"Змінити режим загрузки зображень?", "Налаштування", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    if (isLoading4Images)
-                    {
-                        isLoading4Images = false;
-                        MessageBox.Show($"При наступній зміні номеру. \nЗображення будуть вантажитись по ОДНОМУ.", "Налаштування", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        labelLoading.ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        isLoading4Images = true;
-                        MessageBox.Show($"При наступній зміні номеру. \nЗображення будуть вантажитись по ЧОТИРИ.", "Налаштування", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        labelLoading.ForeColor = Color.ForestGreen;
-                    }
-                }
             }
 
             if (e.KeyCode == Keys.F9)
@@ -788,8 +747,7 @@ namespace Image4glass
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!isLoading4Images)
-                numericUpDownNumber_ValueChanged(sender, e);
+            numericUpDownNumber_ValueChanged(sender, e);
         }
 
         private void ButtonFavorites_Click(object sender, EventArgs e)

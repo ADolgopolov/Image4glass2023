@@ -33,17 +33,6 @@ namespace Image4glass
                 if (value.Contains('|')) 
                 {
                     part2 = value.Replace('|', '\\');
-                } 
-                else
-                {
-                    if (value.Contains('-'))
-                    {
-                        part2 = value.Replace('-', '\\');
-                    }
-                    else
-                    {
-                        part2 = value.Replace('_', '\\');
-                    }
                 }
             }
         }
