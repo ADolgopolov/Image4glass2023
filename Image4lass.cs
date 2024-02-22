@@ -15,7 +15,7 @@ namespace Image4glass
     {
         string folderName;
 
-
+        Point tabControlCenter = new Point(626, 277);
 
         FilePathBuilder filePathBuilder;
 
@@ -541,9 +541,7 @@ namespace Image4glass
                 {
                     Label currentLabel = (Label)sender;
                     labelTimers[currentLabel].Stop(); // Зупиняємо таймер, оскільки зміна тексту відбулася
-                    int x = (int)((tabControl.Width - 24 - currentLabel.Width) / 2);
-                    int y = (int)((tabControl.Height - 24 - currentLabel.Height) / 2);
-                    currentLabel.Location = new Point(x, y);
+                    currentLabel.Location = this.tabControlCenter; 
                     labelStates[currentLabel] = false;
                 };
             }
@@ -628,6 +626,9 @@ namespace Image4glass
                 pictureBox.Height = desiredSize;
                 CenterPictureBox(pictureBox);
             }
+
+            // For Label "Loading..."
+            this.tabControlCenter = new Point((int)((tabControl.Width - 86) / 2), (int)((tabControl.Height - 48) / 2));
         }
 
         private void forAll_labels_ImageIndex_Click(object sender, EventArgs e)
@@ -938,6 +939,7 @@ namespace Image4glass
                 }
             }
         }
+
         /// <summary>
         /// Це тільки для раєра
         /// </summary>

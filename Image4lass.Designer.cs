@@ -438,6 +438,7 @@ namespace Image4glass
             checkBoxFixZoom.AutoSize = true;
             checkBoxFixZoom.Checked = true;
             checkBoxFixZoom.CheckState = CheckState.Checked;
+            checkBoxFixZoom.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             checkBoxFixZoom.Location = new Point(1062, 7);
             checkBoxFixZoom.Name = "checkBoxFixZoom";
             checkBoxFixZoom.Size = new Size(76, 19);

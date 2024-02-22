@@ -79,6 +79,7 @@
             // 
             // button_CopyToClipboard
             // 
+            button_CopyToClipboard.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             button_CopyToClipboard.Location = new Point(113, 57);
             button_CopyToClipboard.Name = "button_CopyToClipboard";
             button_CopyToClipboard.Size = new Size(94, 25);
@@ -89,6 +90,7 @@
             // 
             // button_Reset
             // 
+            button_Reset.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             button_Reset.Location = new Point(8, 57);
             button_Reset.Name = "button_Reset";
             button_Reset.Size = new Size(94, 25);
@@ -100,7 +102,7 @@
             // label_PixelLength_Info
             // 
             label_PixelLength_Info.BorderStyle = BorderStyle.Fixed3D;
-            label_PixelLength_Info.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label_PixelLength_Info.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label_PixelLength_Info.Location = new Point(101, 89);
             label_PixelLength_Info.Name = "label_PixelLength_Info";
             label_PixelLength_Info.Size = new Size(106, 22);
@@ -111,6 +113,7 @@
             // label_PixelLength
             // 
             label_PixelLength.AutoSize = true;
+            label_PixelLength.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label_PixelLength.Location = new Point(12, 94);
             label_PixelLength.Name = "label_PixelLength";
             label_PixelLength.Size = new Size(75, 15);
@@ -120,6 +123,7 @@
             // label_2ndPointInfo
             // 
             label_2ndPointInfo.BorderStyle = BorderStyle.Fixed3D;
+            label_2ndPointInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label_2ndPointInfo.Location = new Point(101, 27);
             label_2ndPointInfo.Name = "label_2ndPointInfo";
             label_2ndPointInfo.Size = new Size(106, 20);
@@ -130,6 +134,7 @@
             // label_1stPointInfo
             // 
             label_1stPointInfo.BorderStyle = BorderStyle.Fixed3D;
+            label_1stPointInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label_1stPointInfo.Location = new Point(101, 7);
             label_1stPointInfo.Name = "label_1stPointInfo";
             label_1stPointInfo.Size = new Size(106, 20);
@@ -140,6 +145,7 @@
             // label_RightClick
             // 
             label_RightClick.AutoSize = true;
+            label_RightClick.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label_RightClick.Location = new Point(12, 30);
             label_RightClick.Name = "label_RightClick";
             label_RightClick.Size = new Size(69, 15);
@@ -149,6 +155,7 @@
             // label_DoubleClick
             // 
             label_DoubleClick.AutoSize = true;
+            label_DoubleClick.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label_DoubleClick.Location = new Point(12, 10);
             label_DoubleClick.Name = "label_DoubleClick";
             label_DoubleClick.Size = new Size(79, 15);
