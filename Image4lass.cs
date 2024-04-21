@@ -7,7 +7,9 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace Image4glass
 {
@@ -22,6 +24,10 @@ namespace Image4glass
         bool isEnableScrolImages = false;
 
         FavoritesRunFolderListStore favoritesRunFolderListStore;
+
+        MainWindowUserSettings mainWindowUserSettings = new MainWindowUserSettings();
+
+        System.Windows.Forms.CheckBox checkBoxEnableScrolImages = new System.Windows.Forms.CheckBox();
 
         public static class ImageLabelText
         {
@@ -38,13 +44,13 @@ namespace Image4glass
 
             this.folderName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            this.filePathBuilder = new FilePathBuilder();
+            this.filePathBuilder = new FilePathBuilder(mainWindowUserSettings.BaseFolderPath);
 
             this.toolStripStatusLabel.Text = filePathBuilder.Part1;
 
 
 
-            favoritesRunFolderListStore = new FavoritesRunFolderListStore(Properties.Settings.Default.FavoritesRunFolders);
+            favoritesRunFolderListStore = new FavoritesRunFolderListStore(mainWindowUserSettings.FavoritesRunFolders);
         }
 
         public Image4lass(string fileNameFromCommandString)
@@ -53,13 +59,16 @@ namespace Image4glass
 
             this.folderName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            this.filePathBuilder = new FilePathBuilder();
+            this.filePathBuilder = new FilePathBuilder(mainWindowUserSettings.BaseFolderPath);
 
             this.toolStripStatusLabel.Text = filePathBuilder.Part1;
 
+            if (fileNameFromCommandString.Contains("Forward")) { tabControl.SelectTab(0); }
+            if (fileNameFromCommandString.Contains("Rear")) { tabControl.SelectTab(1); }
+            if (fileNameFromCommandString.Contains("Left")) { tabControl.SelectTab(2); }
+            if (fileNameFromCommandString.Contains("Right")) { tabControl.SelectTab(3); }
 
-
-            favoritesRunFolderListStore = new FavoritesRunFolderListStore(Properties.Settings.Default.FavoritesRunFolders);
+            favoritesRunFolderListStore = new FavoritesRunFolderListStore(mainWindowUserSettings.FavoritesRunFolders);
 
             if (this.filePathBuilder.initByFullPathFileName(fileNameFromCommandString))
             {
@@ -67,20 +76,38 @@ namespace Image4glass
                 {
                     folderNameChange(filePathBuilder.RunFolderFullPath);
 
-                    if (fileNameFromCommandString.Contains("Forward")) { tabControl.SelectTab(0); }
-                    if (fileNameFromCommandString.Contains("Rear")) { tabControl.SelectTab(1); }
-                    if (fileNameFromCommandString.Contains("Left")) { tabControl.SelectTab(2); }
-                    if (fileNameFromCommandString.Contains("Right")) { tabControl.SelectTab(3); }
-
                     this.numericUpDownFotoNumber.Value = (this.numericUpDownFotoNumber.Value != fileNumber) ? fileNumber : ++fileNumber;
                 }
             }
             else
             {
-                MessageBox.Show($"Помилка парсування шляху: Файл не належить до Базової директорій. Перевірте налаштування.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!String.IsNullOrEmpty(filePathBuilder.Part1))
+                    MessageBox.Show($"Помилка парсування шляху: Файл не належить до Базової директорій. Перевірте налаштування.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                folderNameChange(GetFolderPathWithRun(fileNameFromCommandString));
+
+                this.numericUpDownFotoNumber.Value = int.Parse(Path.GetFileNameWithoutExtension(fileNameFromCommandString));
             }
         }
+        public static string GetFolderPathWithRun(string filePath)
+        {
+            // Розділення шляху до файлу на складові частини
+            string[] parts = filePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
+            // Перебір складових частин шляху
+            for (int i = parts.Length - 1; i >= 0; i--)
+            {
+                // Перевірка, чи містить складова частина слово "Run"
+                if (parts[i].Contains("Run"))
+                {
+                    // Повернення шляху до папки зі словом "Run"
+                    return string.Join(Path.DirectorySeparatorChar.ToString(), parts, 0, i + 1);
+                }
+            }
+
+            // Якщо не знайдено папки зі словом "Run", повертаємо порожній рядок
+            return string.Empty;
+        }
         private void folderNameChange(string newfolder)
         {
             if (Directory.Exists(newfolder))
@@ -169,6 +196,8 @@ namespace Image4glass
             checkBoxFixZoom.Enabled = isEnable;
             numericUpDownShiftimageIndex.Enabled = isEnable;
             tabControl.Enabled = isEnable;
+            //button_FileCopier.Enabled = isEnable;
+            button_GoToImge.Enabled = isEnable;
         }
         /// <summary>
         /// Тут відбувається вся магія. Міняється номер, запускається загрузка зображень.
@@ -203,7 +232,7 @@ namespace Image4glass
             {
                 this.enabledCommandTools(true);
                 this.numericUpDownFotoNumber.Focus();
-                
+
                 switch (this.tabControl.SelectedIndex)
                 {
                     case 0:
@@ -356,21 +385,24 @@ namespace Image4glass
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+
         private void Image4lass_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
             {
                 // Збереження розміру та розташування вікна
-                Properties.Settings.Default.WindowSize = this.Size;
-                Properties.Settings.Default.WindowLocation = this.Location;
-                Properties.Settings.Default.ScrolingImageMode = this.isEnableScrolImages;
-                Properties.Settings.Default.FixZoomChecked = this.checkBoxFixZoom.Checked;
-                Properties.Settings.Default.BaseFolderPath = this.filePathBuilder.Part1;
-                Properties.Settings.Default.FavoritesRunFolders = favoritesRunFolderListStore.ReturnList();
-                Properties.Settings.Default.Save();
+                mainWindowUserSettings.WindowSize = this.Size;
+                mainWindowUserSettings.WindowLocation = this.Location;
+                mainWindowUserSettings.ScrolingImageMode = this.isEnableScrolImages;
+                mainWindowUserSettings.FixZoomChecked = this.checkBoxFixZoom.Checked;
+                mainWindowUserSettings.BaseFolderPath = filePathBuilder.Part1;
+                mainWindowUserSettings.FavoritesRunFolders = favoritesRunFolderListStore.ReturnList();
+
+                mainWindowUserSettings.SaveSettings();
             }
             catch { }
         }
+
 
         /// <summary>
         /// При загрузці форми 
@@ -381,10 +413,42 @@ namespace Image4glass
         private void Image4lass_Load(object sender, EventArgs e)
         {
             // Відновлення розміру та розташування вікна
-            this.Size = Properties.Settings.Default.WindowSize;
-            this.Location = Properties.Settings.Default.WindowLocation;
-            this.isEnableScrolImages = Properties.Settings.Default.ScrolingImageMode;
-            this.checkBoxFixZoom.Checked = Properties.Settings.Default.FixZoomChecked;
+            this.Size = mainWindowUserSettings.WindowSize;
+            this.Location = mainWindowUserSettings.WindowLocation;
+            this.isEnableScrolImages = mainWindowUserSettings.ScrolingImageMode;
+            this.checkBoxFixZoom.Checked = mainWindowUserSettings.FixZoomChecked;
+
+            this.toolTip.SetToolTip(buttonFavorites, "F5"); 
+            this.toolTip.SetToolTip(buttonPast, "Ctrl + V");
+            this.toolTip.SetToolTip(button_GoToImge, "Ctrl + V");
+            this.toolTip.SetToolTip(button_ForwardGetPath, "Ctrl + С");
+            this.toolTip.SetToolTip(button_RearGetPath, "Ctrl + С");
+            this.toolTip.SetToolTip(button_LeftGetPath, "Ctrl + С");
+            this.toolTip.SetToolTip(button_RightGetPath, "Ctrl + С");
+            this.toolTip.SetToolTip(buttonZoomFit, "Esc or key 'F'");
+            this.toolTip.SetToolTip(numericUpDownFotoNumber, "Press key 'G'");
+            this.toolTip.SetToolTip(buttonNumberDown, "Use the arrow keys");
+            this.toolTip.SetToolTip(buttonNumberUp, "Use the arrow keys");
+
+            checkBoxEnableScrolImages.Text = "Enable change photo by scroll";
+            checkBoxEnableScrolImages.Checked = isEnableScrolImages;
+            checkBoxEnableScrolImages.CheckedChanged += checkBoxEnableScrolImages_CheckedChanged;
+            toolStripSplitButton1.DropDownItems.Add(new ToolStripControlHost(checkBoxEnableScrolImages));
+        }
+
+        private void checkBoxEnableScrolImages_CheckedChanged(object? sender, EventArgs e)
+        {
+            if (isEnableScrolImages)
+            {
+                isEnableScrolImages = false;
+                MessageBox.Show($"Прокручування колеса мишки буде маштабувати зображення. \nДля переходу між зображеннями утримуйте CTRL.", "Налаштування", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                isEnableScrolImages = true;
+                MessageBox.Show($"Прокручування колеса мишки буде переключати зображення. \nДля маштабування зображення утримуйте CTRL.", "Налаштування", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            numericUpDownFotoNumber.Focus();
         }
 
         private void openBasicFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -541,7 +605,7 @@ namespace Image4glass
                 {
                     Label currentLabel = (Label)sender;
                     labelTimers[currentLabel].Stop(); // Зупиняємо таймер, оскільки зміна тексту відбулася
-                    currentLabel.Location = this.tabControlCenter; 
+                    currentLabel.Location = this.tabControlCenter;
                     labelStates[currentLabel] = false;
                 };
             }
@@ -688,7 +752,7 @@ namespace Image4glass
                     {
                         this.button_GoToImge_Click(sender, e);
                     }
-                    else 
+                    else
                     {
                         buttonPast_Click(sender, e);
                     }
@@ -728,12 +792,12 @@ namespace Image4glass
                     if (isEnableScrolImages)
                     {
                         isEnableScrolImages = false;
-                        MessageBox.Show($"Прокручування колеса мишки буде маштабувати зображення. \n Для переходу між зображеннями утримуйте CTRL.", "Налаштування", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show($"Прокручування колеса мишки буде маштабувати зображення. \nДля переходу між зображеннями утримуйте CTRL.", "Налаштування", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
                         isEnableScrolImages = true;
-                        MessageBox.Show($"Прокручування колеса мишки буде переключати зображення. \n Для маштабування зображення утримуйте CTRL.", "Налаштування", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show($"Прокручування колеса мишки буде переключати зображення. \nДля маштабування зображення утримуйте CTRL.", "Налаштування", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
@@ -963,6 +1027,13 @@ namespace Image4glass
                 }
             }
         }
-        
+
+        private void button_FileCopier_Click(object sender, EventArgs e)
+        {
+            string path = Path.Combine(Application.StartupPath, "FileCopier\\FileCopier.exe");
+            string[] arguments = { textBoxFolderName.Text, numericUpDownFotoNumber.Value.ToString() }; // Масив параметрів командного рядка
+
+            Process.Start(path, arguments);
+        }
     }
 }

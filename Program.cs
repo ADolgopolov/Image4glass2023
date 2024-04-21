@@ -22,7 +22,7 @@ namespace Image4glass
                     filePath = args[0];
                     if (File.Exists(filePath))
                     {
-                        if(filePath.Contains("Run"))
+                        if (filePath.Contains("Run"))
                         {
                             Application.Run(new Image4lass(filePath));
                         }

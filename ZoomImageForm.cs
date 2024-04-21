@@ -20,13 +20,13 @@ namespace Image4glass
         {
             if (pixelLength_1stPoint.isDefined) this.isZoomFreeze = true;
             if (pixelLength_2ndPoint.isDefined) this.isZoomFreeze = true;
-            this.label_1stPointInfo.Text = this.pixelLength_1stPoint.ToString();
-            this.label_2ndPointInfo.Text = this.pixelLength_2ndPoint.ToString();
+            this.textBox_1stPointInfo.Text = this.pixelLength_1stPoint.ToString();
+            this.textBox_2ndPointInfo.Text = this.pixelLength_2ndPoint.ToString();
             if (pixelLength_1stPoint.isDefined && pixelLength_2ndPoint.isDefined)
             {
-                this.label_PixelLength_Info.Text = CalculateSegmentLength(pixelLength_1stPoint.ToPoint(), pixelLength_2ndPoint.ToPoint()).ToString();
+                this.textBox_PixelLength_Info.Text = CalculateSegmentLength(pixelLength_1stPoint.ToPoint(), pixelLength_2ndPoint.ToPoint()).ToString();
             }
-            else { this.label_PixelLength_Info.Text = "Undefined"; }
+            else { this.textBox_PixelLength_Info.Text = "Undefined"; }
             pictureBox.Invalidate();
         }
 
@@ -273,7 +273,7 @@ namespace Image4glass
 
         private void button_CopyToClipboard_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(this.label_PixelLength_Info.Text);
+            Clipboard.SetText(this.textBox_PixelLength_Info.Text);
         }
 
         private void ZoomImageForm_KeyDown(object sender, KeyEventArgs e)

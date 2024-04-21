@@ -30,6 +30,7 @@ namespace Image4glass
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Image4lass));
             numericUpDownFotoNumber = new NumericUpDown();
             buttonOpenFolder = new Button();
@@ -67,6 +68,8 @@ namespace Image4glass
             textBoxFolderName = new TextBox();
             buttonFavorites = new Button();
             button_GoToImge = new Button();
+            button_FileCopier = new Button();
+            toolTip = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)numericUpDownFotoNumber).BeginInit();
             tabControl.SuspendLayout();
             tabPageForward.SuspendLayout();
@@ -467,7 +470,7 @@ namespace Image4glass
             textBoxFolderName.Name = "textBoxFolderName";
             textBoxFolderName.ReadOnly = true;
             textBoxFolderName.RightToLeft = RightToLeft.Yes;
-            textBoxFolderName.Size = new Size(476, 29);
+            textBoxFolderName.Size = new Size(438, 29);
             textBoxFolderName.TabIndex = 16;
             textBoxFolderName.TextAlign = HorizontalAlignment.Right;
             // 
@@ -494,11 +497,24 @@ namespace Image4glass
             button_GoToImge.UseVisualStyleBackColor = true;
             button_GoToImge.Click += button_GoToImge_Click;
             // 
+            // button_FileCopier
+            // 
+            button_FileCopier.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button_FileCopier.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            button_FileCopier.Image = (Image)resources.GetObject("button_FileCopier.Image");
+            button_FileCopier.Location = new Point(986, 0);
+            button_FileCopier.Name = "button_FileCopier";
+            button_FileCopier.Size = new Size(32, 32);
+            button_FileCopier.TabIndex = 19;
+            button_FileCopier.UseVisualStyleBackColor = true;
+            button_FileCopier.Click += button_FileCopier_Click;
+            // 
             // Image4lass
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1264, 611);
+            Controls.Add(button_FileCopier);
             Controls.Add(button_GoToImge);
             Controls.Add(buttonFavorites);
             Controls.Add(textBoxFolderName);
@@ -517,7 +533,7 @@ namespace Image4glass
             KeyPreview = true;
             MinimumSize = new Size(960, 480);
             Name = "Image4lass";
-            Text = "Image4glass 2024-02-20";
+            Text = "Image4glass 2024-04-20";
             FormClosing += Image4lass_FormClosing;
             Load += Image4lass_Load;
             KeyDown += Image4lass_KeyDown;
@@ -581,5 +597,7 @@ namespace Image4glass
         private Button button_RearGetPath;
         private Button button_LeftGetPath;
         private Button button_RightGetPath;
+        private Button button_FileCopier;
+        private ToolTip toolTip;
     }
 }

@@ -67,14 +67,25 @@ namespace Image4glass
             }
         }
 
-        public FilePathBuilder()
+        public FilePathBuilder(string baseFolderPath)
         {
             isInitializated = false;
             part1 = string.Empty;
             part2 = string.Empty;
             part3 = string.Empty;
             extension = ".jpg";
-            this.ReadData();
+            
+            // ReadData
+            if (String.IsNullOrEmpty(baseFolderPath))
+            {
+                part1 = String.Empty;
+                isInitializated = false;
+            }
+            else
+            {
+                part1 = baseFolderPath;
+                isInitializated = true;
+            }
         }
 
         public void Reset()
@@ -86,25 +97,9 @@ namespace Image4glass
             extension = ".jpg";
         }
 
-        private void ReadData()
-        {
-            string? data = Properties.Settings.Default.BaseFolderPath;
-
-            if (String.IsNullOrEmpty(data))
-            {
-                part1 = String.Empty;
-                isInitializated = false;
-            }
-            else
-            {
-                part1 = data;
-                isInitializated = true;
-            }
-        }
-
         public bool initByFullPathFileName(string fullPathFileName) 
         {
-            if (fullPathFileName.Contains(part1))
+            if (fullPathFileName.Contains(part1) && !String.IsNullOrEmpty(part1))
             {
 
                 this.part2 = fullPathFileName.Replace(part1 + "\\", "");
