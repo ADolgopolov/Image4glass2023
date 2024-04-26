@@ -17,6 +17,13 @@ namespace Image4glass
     {
         string folderName;
 
+        /// <summary>
+        /// При відкриті фото по шляху, потрібно відкрити відповідну вкладку,
+        /// але при зміні вкладки повторно перезапускається завантаження фото.
+        /// ця змінна дає можливість виключити реакцію на tabControl_SelectedIndexChanged
+        /// </summary>
+        bool stopReOpenPhoto = false;
+
         Point tabControlCenter = new Point(626, 277);
 
         FilePathBuilder filePathBuilder;
@@ -28,6 +35,7 @@ namespace Image4glass
         MainWindowUserSettings mainWindowUserSettings = new MainWindowUserSettings();
 
         System.Windows.Forms.CheckBox checkBoxEnableScrolImages = new System.Windows.Forms.CheckBox();
+        System.Windows.Forms.CheckBox checkBoxDisableOpenPhotoByDirection = new System.Windows.Forms.CheckBox();
 
         public static class ImageLabelText
         {
@@ -294,7 +302,30 @@ namespace Image4glass
                         part2 = Regex.Replace(part2, @"\p{C}+", ""); // for desktop version 
                         if (part2.Contains('|') && part2.Contains("Run"))
                         {
+                            this.stopReOpenPhoto = true;
+                            if (part2.Contains("|Forward"))
+                            {
+                                part2 = part2.Replace("|Forward", "");
+                                if(!checkBoxDisableOpenPhotoByDirection.Checked) tabControl.SelectTab(0);
+                            }
+                            if (part2.Contains("|Rear"))
+                            {
+                                part2 = part2.Replace("|Rear", "");
+                                if (!checkBoxDisableOpenPhotoByDirection.Checked) tabControl.SelectTab(1);
+                            }
+                            if (part2.Contains("|Left"))
+                            {
+                                part2 = part2.Replace("|Left", "");
+                                if (!checkBoxDisableOpenPhotoByDirection.Checked) tabControl.SelectTab(2);
+                            }
+                            if (part2.Contains("|Right"))
+                            {
+                                part2 = part2.Replace("|Right", "");
+                                if (!checkBoxDisableOpenPhotoByDirection.Checked) tabControl.SelectTab(3);
+                            }
+                            this.stopReOpenPhoto = false;
                             filePathBuilder.Part2 = part2.Substring(0, part2.LastIndexOf("|")).Replace("Run", "Photos\\Run");
+                            
                         }
                     }
                     catch (Exception ex)
@@ -434,6 +465,11 @@ namespace Image4glass
             checkBoxEnableScrolImages.Checked = isEnableScrolImages;
             checkBoxEnableScrolImages.CheckedChanged += checkBoxEnableScrolImages_CheckedChanged;
             toolStripSplitButton1.DropDownItems.Add(new ToolStripControlHost(checkBoxEnableScrolImages));
+
+            checkBoxDisableOpenPhotoByDirection.Text = "Disable open photo by direction";
+            checkBoxDisableOpenPhotoByDirection.Checked = false;
+            toolStripSplitButton1.DropDownItems.Add(new ToolStripControlHost(checkBoxDisableOpenPhotoByDirection));
+
         }
 
         private void checkBoxEnableScrolImages_CheckedChanged(object? sender, EventArgs e)
@@ -812,7 +848,10 @@ namespace Image4glass
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            numericUpDownNumber_ValueChanged(sender, e);
+            if (!this.stopReOpenPhoto)
+            {
+                numericUpDownNumber_ValueChanged(sender, e);
+            }
         }
 
         private void ButtonFavorites_Click(object sender, EventArgs e)
@@ -955,10 +994,12 @@ namespace Image4glass
                         {
                             folderNameChange(filePathBuilder.RunFolderFullPath);
 
+                            this.stopReOpenPhoto = true;
                             if (filePath.Contains("Forward")) { fileNumber += (int)numericUpDownShiftimageIndex.Value; tabControl.SelectTab(0); }
                             if (filePath.Contains("Rear")) { fileNumber -= (int)numericUpDownShiftimageIndex.Value; tabControl.SelectTab(1); }
                             if (filePath.Contains("Left")) { tabControl.SelectTab(2); }
                             if (filePath.Contains("Right")) { tabControl.SelectTab(3); }
+                            this.stopReOpenPhoto = false;
                             this.numericUpDownFotoNumber.Value = fileNumber;
                         }
                     }
