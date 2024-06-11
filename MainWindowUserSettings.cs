@@ -23,7 +23,11 @@ namespace Image4glass
 
         public Point WindowLocation
         {
-            get { return ss.WindowLocation; }
+            get 
+            {
+                //чи належать координати видимій області головного екрану, і якщо ні, то присвоює значення (0, 0)
+                return EnsureVisibleOnPrimaryScreen(ss.WindowLocation.X, ss.WindowLocation.Y); ; 
+            }
             set { ss.WindowLocation = value; }
         }
         public Size WindowSize
@@ -92,6 +96,22 @@ namespace Image4glass
             {
                 // Серіалізувати об'єкт та зберегти у файл
                 serializer.Serialize(writer, ss);
+            }
+        }
+
+        public Point EnsureVisibleOnPrimaryScreen(int x, int y)
+        {
+            // Отримати робочу область основного екрану
+            Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
+
+            // Перевірити, чи координати належать робочій області
+            if (workingArea.Contains(x, y))
+            {
+                return new Point(x, y);
+            }
+            else
+            {
+                return new Point(0, 0);
             }
         }
     }
