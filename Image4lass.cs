@@ -422,8 +422,24 @@ namespace Image4glass
             try
             {
                 // Збереження розміру та розташування вікна
+                mainWindowUserSettings.WindowLocation = new Point(0, 0);
+                foreach (var screen in Screen.AllScreens)
+                {
+                    // Отримати розміри екрана
+                    // var screenBounds = screen.Bounds;
+                    var screenWorkingArea = screen.WorkingArea;
+
+                    // Відобразити розміри екрана
+                    // MessageBox.Show($"Екран: {screen.DeviceName}\nРозмір: {screenBounds.Width}x{screenBounds.Height}\nРобоча область: {screenWorkingArea.Width}x{screenWorkingArea.Height}", "Розміри екрану");
+                    
+                    // Перевірити, чи координати належать робочій області
+                    if (screenWorkingArea.Contains(this.Location))
+                    {
+                        mainWindowUserSettings.WindowLocation = this.Location;
+                    }
+                }
+
                 mainWindowUserSettings.WindowSize = this.Size;
-                mainWindowUserSettings.WindowLocation = this.Location;
                 mainWindowUserSettings.ScrolingImageMode = this.isEnableScrolImages;
                 mainWindowUserSettings.FixZoomChecked = this.checkBoxFixZoom.Checked;
                 mainWindowUserSettings.BaseFolderPath = filePathBuilder.Part1;

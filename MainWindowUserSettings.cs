@@ -26,7 +26,7 @@ namespace Image4glass
             get 
             {
                 //чи належать координати видимій області головного екрану, і якщо ні, то присвоює значення (0, 0)
-                return EnsureVisibleOnPrimaryScreen(ss.WindowLocation.X, ss.WindowLocation.Y); ; 
+                return EnsureVisibleOnPrimaryScreen(ss.WindowLocation);
             }
             set { ss.WindowLocation = value; }
         }
@@ -99,20 +99,18 @@ namespace Image4glass
             }
         }
 
-        public Point EnsureVisibleOnPrimaryScreen(int x, int y)
+        public Point EnsureVisibleOnPrimaryScreen(Point savedLocation)
         {
-            // Отримати робочу область основного екрану
-            Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
-
-            // Перевірити, чи координати належать робочій області
-            if (workingArea.Contains(x, y))
+            foreach (var screen in Screen.AllScreens)
             {
-                return new Point(x, y);
+                var screenWorkingArea = screen.WorkingArea;
+                // Перевірити, чи координати належать робочій області
+                if (screenWorkingArea.Contains(savedLocation))
+                {
+                    return savedLocation;
+                }
             }
-            else
-            {
-                return new Point(0, 0);
-            }
+            return new Point(0, 0);
         }
     }
 }
