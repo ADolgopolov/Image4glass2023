@@ -761,6 +761,12 @@ namespace Image4glass
 
         private void Image4lass_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Q)
+            {
+                this.WindowState = FormWindowState.Minimized;
+                e.Handled = true;
+            }
+
             if (e.KeyCode == Keys.F1 || (e.Alt && e.KeyCode == Keys.D1))
             {
                 tabControl.SelectTab(0);

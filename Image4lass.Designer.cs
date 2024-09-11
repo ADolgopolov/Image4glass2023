@@ -136,7 +136,6 @@ namespace Image4glass
             tabPageForward.Size = new Size(1244, 520);
             tabPageForward.TabIndex = 0;
             tabPageForward.Text = "Forward";
-            tabPageForward.UseVisualStyleBackColor = true;
             tabPageForward.Click += buttonZoomFit_Click;
             tabPageForward.MouseWheel += emptySpace_MouseWheel;
             // 
@@ -150,7 +149,7 @@ namespace Image4glass
             button_ForwardGetPath.Size = new Size(93, 33);
             button_ForwardGetPath.TabIndex = 8;
             button_ForwardGetPath.Text = "Get Path";
-            button_ForwardGetPath.UseVisualStyleBackColor = true;
+            button_ForwardGetPath.UseVisualStyleBackColor = false;
             button_ForwardGetPath.Click += button_ForwardGetPath_Click;
             // 
             // labelForwardImageIndex
@@ -190,7 +189,6 @@ namespace Image4glass
             tabPageRear.Size = new Size(1244, 520);
             tabPageRear.TabIndex = 1;
             tabPageRear.Text = "Rear";
-            tabPageRear.UseVisualStyleBackColor = true;
             tabPageRear.Click += buttonZoomFit_Click;
             tabPageRear.MouseWheel += emptySpace_MouseWheel_invert;
             // 
@@ -244,7 +242,6 @@ namespace Image4glass
             tabPageLeft.Size = new Size(1244, 520);
             tabPageLeft.TabIndex = 2;
             tabPageLeft.Text = "Left";
-            tabPageLeft.UseVisualStyleBackColor = true;
             tabPageLeft.Click += buttonZoomFit_Click;
             tabPageLeft.MouseWheel += emptySpace_MouseWheel;
             // 
@@ -298,7 +295,6 @@ namespace Image4glass
             tabPageRight.Size = new Size(1244, 520);
             tabPageRight.TabIndex = 3;
             tabPageRight.Text = "Right";
-            tabPageRight.UseVisualStyleBackColor = true;
             tabPageRight.Click += buttonZoomFit_Click;
             tabPageRight.MouseWheel += emptySpace_MouseWheel;
             // 
