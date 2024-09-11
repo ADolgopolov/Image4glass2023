@@ -200,6 +200,7 @@ namespace Image4glass
             buttonNumberUp.Visible = isEnable;
             buttonOpenFolder.Enabled = isEnable;
             buttonFavorites.Enabled = isEnable;
+            textBoxFolderName.Enabled = isEnable;
             buttonZoomFit.Enabled = isEnable;
             checkBoxFixZoom.Enabled = isEnable;
             numericUpDownShiftimageIndex.Enabled = isEnable;
@@ -239,7 +240,8 @@ namespace Image4glass
             finally
             {
                 this.enabledCommandTools(true);
-                this.numericUpDownFotoNumber.Focus();
+                //this.numericUpDownFotoNumber.Focus(); // убрав фокус, що б не плямкало на вводі
+                this.buttonOpenFolder.Focus();
 
                 switch (this.tabControl.SelectedIndex)
                 {
@@ -306,7 +308,7 @@ namespace Image4glass
                             if (part2.Contains("|Forward"))
                             {
                                 part2 = part2.Replace("|Forward", "");
-                                if(!checkBoxDisableOpenPhotoByDirection.Checked) tabControl.SelectTab(0);
+                                if (!checkBoxDisableOpenPhotoByDirection.Checked) tabControl.SelectTab(0);
                             }
                             if (part2.Contains("|Rear"))
                             {
@@ -325,7 +327,7 @@ namespace Image4glass
                             }
                             this.stopReOpenPhoto = false;
                             filePathBuilder.Part2 = part2.Substring(0, part2.LastIndexOf("|")).Replace("Run", "Photos\\Run");
-                            
+
                         }
                     }
                     catch (Exception ex)
@@ -431,7 +433,7 @@ namespace Image4glass
 
                     // Відобразити розміри екрана
                     // MessageBox.Show($"Екран: {screen.DeviceName}\nРозмір: {screenBounds.Width}x{screenBounds.Height}\nРобоча область: {screenWorkingArea.Width}x{screenWorkingArea.Height}", "Розміри екрану");
-                    
+
                     // Перевірити, чи координати належать робочій області
                     if (screenWorkingArea.Contains(this.Location))
                     {
@@ -465,7 +467,7 @@ namespace Image4glass
             this.isEnableScrolImages = mainWindowUserSettings.ScrolingImageMode;
             this.checkBoxFixZoom.Checked = mainWindowUserSettings.FixZoomChecked;
 
-            this.toolTip.SetToolTip(buttonFavorites, "F5"); 
+            this.toolTip.SetToolTip(buttonFavorites, "F5");
             this.toolTip.SetToolTip(buttonPast, "Ctrl + V");
             this.toolTip.SetToolTip(button_GoToImge, "Ctrl + V");
             this.toolTip.SetToolTip(button_ForwardGetPath, "Ctrl + С");
@@ -761,10 +763,15 @@ namespace Image4glass
 
         private void Image4lass_KeyDown(object sender, KeyEventArgs e)
         {
+            // Перевірка, чи натиснута клавіша не є цифровою
+            if (!char.IsDigit((char)e.KeyCode) && (e.KeyCode < Keys.NumPad0 || e.KeyCode > Keys.NumPad9))
+            {
+                this.buttonOpenFolder.Focus(); // Передача фокусу на кнопку buttonFavorites
+            }
+
             if (e.KeyCode == Keys.Q)
             {
                 this.WindowState = FormWindowState.Minimized;
-                e.Handled = true;
             }
 
             if (e.KeyCode == Keys.F1 || (e.Alt && e.KeyCode == Keys.D1))
@@ -821,18 +828,24 @@ namespace Image4glass
 
         private void Image4lass_KeyUp(object sender, KeyEventArgs e)
         {
+            // Перевірка, чи натиснута клавіша не є цифровою
+            if (!char.IsDigit((char)e.KeyCode) && (e.KeyCode < Keys.NumPad0 || e.KeyCode > Keys.NumPad9))
+            {
+                this.buttonOpenFolder.Focus(); // Передача фокусу на кнопку buttonFavorites
+            }
+
             if (e.KeyCode == Keys.Escape || (e.KeyCode == Keys.F))
             {
                 buttonZoomFit_Click(sender, e);
             }
 
             // перехід між зображеннями за допомогою стрілок клавіатури
-            if (e.KeyCode == Keys.Right)
+            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Up)
             {
                 if (buttonNumberUp.Visible)
                     buttonNumberUp_Click(sender, e);
             }
-            if (e.KeyCode == Keys.Left)
+            if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Down)
             {
                 if (buttonNumberDown.Visible)
                     buttonNumberDown_Click(sender, e);
