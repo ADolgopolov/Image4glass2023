@@ -87,6 +87,7 @@ namespace Image4glass
             // numericUpDownFotoNumber
             // 
             numericUpDownFotoNumber.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            numericUpDownFotoNumber.InterceptArrowKeys = false;
             numericUpDownFotoNumber.Location = new Point(123, 2);
             numericUpDownFotoNumber.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             numericUpDownFotoNumber.Name = "numericUpDownFotoNumber";

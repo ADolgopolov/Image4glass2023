@@ -240,7 +240,7 @@ namespace Image4glass
             finally
             {
                 this.enabledCommandTools(true);
-                //this.numericUpDownFotoNumber.Focus(); // убрав фокус, що б не плямкало на вводі
+                this.numericUpDownFotoNumber.Focus(); // убрав фокус, що б не плямкало на вводі
                 this.buttonOpenFolder.Focus();
 
                 switch (this.tabControl.SelectedIndex)
@@ -763,15 +763,27 @@ namespace Image4glass
 
         private void Image4lass_KeyDown(object sender, KeyEventArgs e)
         {
+            
             // Перевірка, чи натиснута клавіша не є цифровою
-            if (!char.IsDigit((char)e.KeyCode) && (e.KeyCode < Keys.NumPad0 || e.KeyCode > Keys.NumPad9))
+            if (!char.IsDigit((char)e.KeyCode) && (e.KeyCode < Keys.NumPad0 || e.KeyCode > Keys.NumPad9) && (e.KeyCode != Keys.Enter))
             {
-                this.buttonOpenFolder.Focus(); // Передача фокусу на кнопку buttonFavorites
-            }
-
-            if (e.KeyCode == Keys.Q)
-            {
-                this.WindowState = FormWindowState.Minimized;
+                switch(e.KeyCode)
+                {
+                    case Keys.Left:
+                    case Keys.Down:
+                        if (buttonNumberDown.Visible)
+                            buttonNumberDown_Click(sender, e);
+                        break;
+                    case Keys.Up:
+                    case Keys.Right:
+                        if (buttonNumberUp.Visible)
+                            buttonNumberUp_Click(sender, e);
+                        break;
+                    case Keys.Q:
+                        this.WindowState = FormWindowState.Minimized;
+                        break;
+                }
+                e.Handled = true;
             }
 
             if (e.KeyCode == Keys.F1 || (e.Alt && e.KeyCode == Keys.D1))
@@ -828,27 +840,9 @@ namespace Image4glass
 
         private void Image4lass_KeyUp(object sender, KeyEventArgs e)
         {
-            // Перевірка, чи натиснута клавіша не є цифровою
-            if (!char.IsDigit((char)e.KeyCode) && (e.KeyCode < Keys.NumPad0 || e.KeyCode > Keys.NumPad9))
-            {
-                this.buttonOpenFolder.Focus(); // Передача фокусу на кнопку buttonFavorites
-            }
-
             if (e.KeyCode == Keys.Escape || (e.KeyCode == Keys.F))
             {
                 buttonZoomFit_Click(sender, e);
-            }
-
-            // перехід між зображеннями за допомогою стрілок клавіатури
-            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Up)
-            {
-                if (buttonNumberUp.Visible)
-                    buttonNumberUp_Click(sender, e);
-            }
-            if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Down)
-            {
-                if (buttonNumberDown.Visible)
-                    buttonNumberDown_Click(sender, e);
             }
 
             if (e.KeyCode == Keys.F5)
